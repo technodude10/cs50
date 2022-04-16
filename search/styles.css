@@ -3,9 +3,14 @@ a {
   text-decoration: none;
 }
 
-.container {
+
+.main {
     margin-top: 20vh;
     text-align: center;
+}
+
+#adv {
+    margin-top: 10vh;
 }
 
 #searchbar {
@@ -17,8 +22,16 @@ a {
     max-width: 150px;
 }
 
+.advbtn {
+    margin: 0px 575px;
+}
+
 .navbar {
     justify-content: end;
     margin-right: 2em;
+}
+
+input {
+    max-width: 500px;
 }
 

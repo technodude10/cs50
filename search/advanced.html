@@ -8,31 +8,59 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="styles.css" />
-    <title>Search</title>
+    <title>Advanced</title>
   </head>
   <body>
     <div class="navbar">
       <a href="index.html">Search</a>
     </div>
+ 
+    
 
-    <div class="container">
-      <h1 class="mb-4">Advanced Search</h1>
-      <form action="https://www.google.com/advanced_search">
-        <div class="mb-4">
-          <input
-            id="searchbar"
-            class="form-control form-control-lg mx-auto"
-            type="text"
-            name="q"
-          />
-        </div>
+    <div id="adv" class="container">
+        <h3>Advanced Search</h3>
+        <hr class="mb-5">
         <div>
-          <button type="submit" class="btn btn-primary form-control mx-auto">
-            Google Search
-          </button>
+            <h5>Find pages with...</h5>
         </div>
+      <form action="https://www.google.com/search" method="get">
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">all these words: </label>
+          <div class="col-sm-10">
+            <input type="text" name="as_q" class="form-control" />
+          </div>
+        </div>
+        
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label"
+            >this exact word or phrase:</label
+          >
+          <div class="col-sm-10">
+            <input type="text" name="as_epq" class="form-control"/>
+          </div>
+        </div>
+        
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label"
+              >any of these words:</label
+            >
+            <div class="col-sm-10">
+              <input type="text" name="as_oq" class="form-control"/>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label"
+              >none of these words:</label
+            >
+            <div class="col-sm-10">
+              <input type="text" name="as_eq" class="form-control"/>
+            </div>
+          </div>
+          <button type="submit" class="btn advbtn btn-primary form-control">Advanced Search</button>
       </form>
     </div>
+    
   </body>
 </html>
 
