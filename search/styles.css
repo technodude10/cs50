@@ -4,12 +4,12 @@ a {
 }
 
 .container {
-    margin-top: 35vh;
+    margin-top: 20vh;
     text-align: center;
 }
 
 #searchbar {
-    max-width: 500px;
+    max-width: 600px;
     border-radius: 50px
 }
 

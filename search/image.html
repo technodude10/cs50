@@ -8,14 +8,30 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="styles.css" />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Images</title>
+    <title>Search</title>
   </head>
   <body>
     <div class="navbar">
-      <a href="index.html">Google</a>
+      <a href="index.html">Search</a>
+    </div>
+
+    <div class="container">
+      <h1 class="mb-4">Image Search</h1>
+      <form action="http://www.google.com/images">
+        <div class="mb-4">
+          <input
+            id="searchbar"
+            class="form-control form-control-lg mx-auto"
+            type="text"
+            name="q"
+          />
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary form-control mx-auto">
+            Google Search
+          </button>
+        </div>
+      </form>
     </div>
   </body>
 </html>
