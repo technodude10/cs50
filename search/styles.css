@@ -1,0 +1,24 @@
+a {
+  padding: 8px;
+  text-decoration: none;
+}
+
+.container {
+    margin-top: 35vh;
+    text-align: center;
+}
+
+#searchbar {
+    max-width: 500px;
+    border-radius: 50px
+}
+
+.btn {
+    max-width: 150px;
+}
+
+.navbar {
+    justify-content: end;
+    margin-right: 2em;
+}
+
