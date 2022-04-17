@@ -8,3 +8,12 @@ def index(request):
         "entries": util.list_entries()
     })
 
+def wiki(request, title):
+    if not util.get_entry(title):
+        return render(request, "encyclopedia/error.html")
+    else:
+        data = util.get_entry(title)
+        return render(request, "encyclopedia/entry.html", {
+            "data": data
+        })
+
