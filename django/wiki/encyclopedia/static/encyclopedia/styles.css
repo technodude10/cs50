@@ -1,3 +1,7 @@
+html {
+    overflow-y: scroll; 
+}
+
 body {
     margin: 0;
     background-color: white;
@@ -15,6 +19,7 @@ h1 {
 textarea {
     height: 90vh;
     width: 80%;
+
 }
 
 .main {
