@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django import forms
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from markdown2 import Markdown
 from . import util
 
@@ -37,7 +37,7 @@ def search(request):
 
     
     if util.get_entry(title):
-        return redirect(f'wiki/{title}')
+        return HttpResponseRedirect(f'wiki/{title}')
 
 
     possible_entry = []
@@ -59,15 +59,23 @@ def newpage(request):
             })
         else:
             util.save_entry(title, content)
-            return redirect(f'wiki/{title}')
+            return HttpResponseRedirect(f'/wiki/{title}')
 
     else:
         return render(request, "encyclopedia/newpage.html")
 
 def editpage(request, title):
-    content = util.get_entry(title)
-    print(content)
-    return render(request, "encyclopedia/editpage.html", {
-        "title": title,
-        "content": content
-    })
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        util.save_entry(title, content)
+        return HttpResponseRedirect(f'/wiki/{title}')
+
+    else:
+        content = util.get_entry(title)
+        print(content)
+        return render(request, "encyclopedia/editpage.html", {
+            "title": title,
+            "content": content
+        })
