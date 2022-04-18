@@ -63,3 +63,11 @@ def newpage(request):
 
     else:
         return render(request, "encyclopedia/newpage.html")
+
+def editpage(request, title):
+    content = util.get_entry(title)
+    print(content)
+    return render(request, "encyclopedia/editpage.html", {
+        "title": title,
+        "content": content
+    })

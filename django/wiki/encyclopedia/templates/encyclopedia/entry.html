@@ -3,4 +3,7 @@
 
 {% block body %}
 {{ data |safe }}
+<div>
+    <button class="btn btn-secondary"><a href="{% url 'encyclopedia:editpage' title %}"style="text-decoration: none; color: white;">Edit Page</a></button>  
+</div>
 {% endblock %}
