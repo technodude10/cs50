@@ -1,8 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from markdown2 import Markdown
 from . import util
+from random import choice, choices
 
 
 class NewForm(forms.Form):
@@ -79,3 +80,9 @@ def editpage(request, title):
             "title": title,
             "content": content
         })
+
+def random(request):
+    list_of_titles = util.list_entries()
+    title = choices(list_of_titles)[0]
+    print( title )
+    return HttpResponseRedirect(f'/wiki/{title}')
