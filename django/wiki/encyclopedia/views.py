@@ -18,7 +18,7 @@ def index(request):
         "form": NewForm
     })
 
-def wiki(request, title):
+def page(request, title):
     if not util.get_entry(title):
         return render(request, "encyclopedia/error.html", {
                 "message": "Content not available"
