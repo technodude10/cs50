@@ -3,7 +3,7 @@ from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from markdown2 import Markdown
 from . import util
-from random import choice, choices
+from random import choices
 
 
 class NewForm(forms.Form):
@@ -75,7 +75,6 @@ def editpage(request, title):
 
     else:
         content = util.get_entry(title)
-        print(content)
         return render(request, "encyclopedia/editpage.html", {
             "title": title,
             "content": content
@@ -84,5 +83,4 @@ def editpage(request, title):
 def random(request):
     list_of_titles = util.list_entries()
     title = choices(list_of_titles)[0]
-    print( title )
     return HttpResponseRedirect(f'/wiki/{title}')
