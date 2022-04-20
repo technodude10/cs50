@@ -59,8 +59,12 @@ def newpage(request):
            return render(request, "encyclopedia/error.html", {
                 "message": "Enter the details"
             }) 
+        if title.isspace() or content.isspace():
+            return render(request, "encyclopedia/error.html", {
+                "message": "Enter the details"
+            }) 
 
-        elif util.get_entry(title) != None:
+        if util.get_entry(title) != None:
             return render(request, "encyclopedia/error.html", {
                 "message": "Page already exists"
             })
@@ -74,8 +78,19 @@ def newpage(request):
 def editpage(request, title):
 
     if request.method == 'POST':
+
         title = request.POST.get('title')
         content = request.POST.get('content')
+
+        if not (title and content):
+           return render(request, "encyclopedia/error.html", {
+                "message": "Enter the details"
+            }) 
+        if title.isspace() or content.isspace():
+            return render(request, "encyclopedia/error.html", {
+                "message": "Enter the details"
+            })
+
         util.save_entry(title, content)
         return HttpResponseRedirect(f'/wiki/{title}')
 
