@@ -54,7 +54,13 @@ def newpage(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        if util.get_entry(title) != None:
+
+        if not (title and content):
+           return render(request, "encyclopedia/error.html", {
+                "message": "Enter the details"
+            }) 
+
+        elif util.get_entry(title) != None:
             return render(request, "encyclopedia/error.html", {
                 "message": "Page already exists"
             })
