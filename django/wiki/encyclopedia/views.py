@@ -5,19 +5,22 @@ from markdown2 import Markdown
 from . import util
 from random import choices
 
-
+# Creates a form
 class NewForm(forms.Form):
     forms = forms.CharField(label='', 
                     widget=forms.TextInput(attrs={'placeholder': 'Search Encyclopedia'}))
 
+# enable markdown module
 markdowner = Markdown()
 
+# display index page
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(), 
         "form": NewForm
     })
 
+# Display entries
 def page(request, title):
     if not util.get_entry(title):
         return render(request, "encyclopedia/error.html", {
@@ -30,6 +33,7 @@ def page(request, title):
             "data": data, "form": NewForm, "title": title
         })
 
+# perform search funtion
 def search(request):
     if request.method == "POST":
         form = NewForm(request.POST)
@@ -50,6 +54,7 @@ def search(request):
         "form": NewForm
     })
 
+# create new page
 def newpage(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -75,6 +80,7 @@ def newpage(request):
     else:
         return render(request, "encyclopedia/newpage.html")
 
+# enable page edit feature
 def editpage(request, title):
 
     if request.method == 'POST':
@@ -101,6 +107,7 @@ def editpage(request, title):
             "content": content
         })
 
+# select random page using random module
 def random(request):
     list_of_titles = util.list_entries()
     title = choices(list_of_titles)[0]
