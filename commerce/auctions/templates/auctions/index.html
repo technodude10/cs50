@@ -1,6 +1,6 @@
 {% extends "auctions/layout.html" %} {% block body %}
 
-<div class="mb-2">
+<div class="mb-3">
   <h2>Active Listings</h2>
 </div>
 
@@ -14,7 +14,7 @@
         <p class="card-text">{{ list.desc}}</p>
       </div>
       <div class="card-footer text-center">
-        <small><strong>Price: $</strong>{{ list.bid}}</small>
+        <strong>Price: ${{ list.bid}}</strong>
       </div>
     </div>
   </div>
