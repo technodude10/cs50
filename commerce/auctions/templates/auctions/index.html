@@ -4,9 +4,10 @@
     <h2>Active Listings</h2>
 
 
-    <div class="card-deck">
+    <div class="row row-cols-2 row-cols-md-4">
       {% for list in listing %}
-      <div class="card">
+      <div class="col mb-4">
+        <div class="card h-100">
         <img class="card-img-top" src="{{ list.url}}" alt="{{ list.title }}">
         <div class="card-body">
           <h5 class="card-title">{{ list.title }}</h5>
@@ -16,6 +17,7 @@
           <small class="text-muted"><strong>Price: $</strong>{{ list.bid}}</small>
         </div>
       </div>
+    </div>
       {% empty %}
         <p>No Listings</p>
       {% endfor %}
