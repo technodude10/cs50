@@ -3,24 +3,29 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-        <ul style="list-style-type: none;">
-            <div class="container">
-                <div class="row row-cols-3">
-                    {% for list in listing %}
-                  <div class="col my-5">
-                      <div class="text-center">
-                        <li><h5>{{ list.title }}</h5></li>
-                      </div>
-                    <li> <img src={{ list.url}} alt={{ list.title }} class="img-fluid"> </li>
-                    <li><strong>Price: $</strong>{{ list.bid}}</li>
-                    <li>{{ list.desc}}</li>
-                  </div>
-                  {% empty %}
-                <li>No Listings</li>
-            {% endfor %}
-                </div>
-              </div>          
-        </ul>
+
+    <div class="card-deck">
+      {% for list in listing %}
+      <div class="card">
+        <img class="card-img-top" src="{{ list.url}}" alt="{{ list.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ list.title }}</h5>
+          <p class="card-text">{{ list.desc}}</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted"><strong>Price: $</strong>{{ list.bid}}</small>
+        </div>
+      </div>
+      {% empty %}
+        <p>No Listings</p>
+      {% endfor %}
+      
+    </div>
+
+                    
+
+                  
+       
     
 
 {% endblock %}
