@@ -9,13 +9,7 @@
     </head>
     <body>
         <h1>Auctions</h1>
-        <div>
-            {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %}
-        </div>
+        
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
@@ -35,9 +29,17 @@
                     <a class="nav-link" href="{% url 'register' %}">Register</a>
                 </li>
             {% endif %}
+                <li class="nav-item">
+                    {% if user.is_authenticated %}
+                        <p class="nav-link">Signed in as <strong>{{ user.username }}</strong></p>
+                    {% else %}
+                        <p class="nav-link">Not signed in</p>
+                    {% endif %}
+                </li>
         </ul>
         <hr>
         {% block body %}
         {% endblock %}
+        
     </body>
 </html>

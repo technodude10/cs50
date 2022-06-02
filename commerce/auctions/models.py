@@ -6,7 +6,13 @@ class User(AbstractUser):
     pass
 
 class Listing(models.Model):
-    pass
+    title = models.CharField(max_length=200)
+    desc = models.CharField(max_length=200)
+    bid = models.IntegerField()
+    url = models.URLField(max_length=200)
+
+    def __str__(self):
+        return f"{self.title}, {self.desc}, {self.bid}, {self.url}"
 
 class Bid(models.Model):
     pass
