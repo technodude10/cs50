@@ -47,6 +47,8 @@
           </form>
         </div>
 
+        <!-- Adds and removes from watchlist -->
+
         {% if not in_wishlist %}
         <div>
           <a href="{% url 'watchlist' list.id %}" style="text-decoration: none;" > 
@@ -59,7 +61,6 @@
             Remove from watchlist
           </a>
         </div>
-
         {% endif %}
 
         
