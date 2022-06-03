@@ -71,7 +71,8 @@ def create_listing(request):
         desc = request.POST["desc"]
         bid = request.POST["bid"]
         url = request.POST["url"]
-        listing = Listing.objects.create(title=title, desc=desc, bid=bid, url=url)
+        userid = request.user
+        listing = Listing.objects.create(title=title, desc=desc, bid=bid, url=url, userid=userid)
         listing.save()
         return HttpResponseRedirect(reverse("index"))
 
@@ -88,13 +89,8 @@ def listing_page(request, listing_id):
 def place_bid(request, listing_id):
     if request.method == "POST":
         bid_value = request.POST["bid_value"]
-        print(bid_value)
         list = Listing.objects.get(pk=listing_id)
-        return render(request, "auctions/listing_page.html", {
-            "list": list
-        })
-    else:
-        list = Listing.objects.get(pk=listing_id)
-        return render(request, "auctions/listing_page.html", {
-            "list": list
-        })
+        print(bid_value, list)
+        
+        return HttpResponseRedirect("listing_page")
+        
