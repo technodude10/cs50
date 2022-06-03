@@ -77,3 +77,10 @@ def create_listing(request):
 
     else:
         return render(request, "auctions/create_listing.html")
+
+
+def listing_page(request, listing_id):
+    list = Listing.objects.get(pk=listing_id)
+    return render(request, "auctions/listing_page.html", {
+        "list": list
+    })
