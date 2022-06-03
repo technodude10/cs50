@@ -85,6 +85,7 @@ def listing_page(request, listing_id):
     list = Listing.objects.get(pk=listing_id)
     return render(request, "auctions/listing_page.html", {
         "list": list,
+        "in_wishlist": in_wishlist(request, listing_id)
     })
 
 def place_bid(request, listing_id):
@@ -95,23 +96,29 @@ def place_bid(request, listing_id):
         
         return HttpResponseRedirect("listing_page")
 
+
 def in_wishlist(request, listing_id):
     user = request.user
     list = Listing.objects.get(pk=listing_id)
     watchlist =  Watchlist.objects.filter(userwatchlist=user, listwatchlist=list).first()
     if watchlist == None:
-        return True 
+        return False
+    else:
+        return True
 
 
 def watchlist(request, listing_id):
-    if in_wishlist(request, listing_id):
-        userwatchlist = request.user
-        listwatchlist = Listing.objects.get(pk=listing_id)
+    userwatchlist = request.user
+    listwatchlist = Listing.objects.get(pk=listing_id)
+
+    if not in_wishlist(request, listing_id):
         watchlist = Watchlist.objects.create(userwatchlist=userwatchlist, listwatchlist=listwatchlist)
         watchlist.save
         return HttpResponseRedirect("listing_page")
     else:
-        return redirect("auctions/listing_page.html")
+        watchlist =  Watchlist.objects.filter(userwatchlist=userwatchlist, listwatchlist=listwatchlist).delete()
+        return HttpResponseRedirect("listing_page")
+
         
     
     

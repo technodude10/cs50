@@ -47,12 +47,20 @@
           </form>
         </div>
 
-
+        {% if not in_wishlist %}
         <div>
           <a href="{% url 'watchlist' list.id %}" style="text-decoration: none;" > 
             Add to watchlist
           </a>
         </div>
+        {% else %}
+        <div>
+          <a href="{% url 'watchlist' list.id %}" style="text-decoration: none;" > 
+            Remove from watchlist
+          </a>
+        </div>
+
+        {% endif %}
 
         
         {% else %}
