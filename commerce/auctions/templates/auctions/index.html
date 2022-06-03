@@ -15,7 +15,7 @@
         <a href="{% url 'listing_page' list.id %}" class="stretched-link"></a>
       </div>
       <div class="card-footer text-center">
-        <strong>Price: ${{ list.bid}}</strong>
+        <strong>Price: ${{ list.bid|floatformat:2 }}</strong>
       </div>
     </div>
   </div>

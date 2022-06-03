@@ -8,7 +8,7 @@ class User(AbstractUser):
 class Listing(models.Model):
     title = models.CharField(max_length=200)
     desc = models.CharField(max_length=200)
-    bid = models.IntegerField()
+    bid = models.FloatField()
     url = models.URLField(max_length=200)
 
     def __str__(self):
