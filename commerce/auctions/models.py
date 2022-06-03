@@ -15,8 +15,16 @@ class Listing(models.Model):
     def __str__(self):
         return f"{self.title}, {self.desc}, {self.bid}, {self.url}"
 
+
+class Watchlist(models.Model):
+    userwatchlist = models.ForeignKey(User, on_delete=models.CASCADE, related_name="userwatchlist")
+    listwatchlist = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listwatchlist") 
+    def __str__(self):
+        return f"{self.userwatchlist}, {self.listwatchlist}"
+
 class Bid(models.Model):
     pass
 
 class Comments(models.Model):
     pass
+

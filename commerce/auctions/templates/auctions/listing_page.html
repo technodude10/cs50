@@ -1,5 +1,10 @@
 {% extends "auctions/layout.html" %} {% block body %}
 
+{% if message %}
+  <div>{{ message }}</div>
+{% endif %}
+
+
 <div class="card m-5 border-0">
   <div class="row g-0">
     <div class="col-md-4">
@@ -41,6 +46,15 @@
             </div>
           </form>
         </div>
+
+
+        <div>
+          <a href="{% url 'watchlist' list.id %}" style="text-decoration: none;" > 
+            Add to watchlist
+          </a>
+        </div>
+
+        
         {% else %}
         <a href="{% url 'login' %}">Login to place bid</a>
         {% endif %}

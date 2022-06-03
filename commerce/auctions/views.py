@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import User, Listing
+from .models import User, Listing, Watchlist
 
 
 def index(request):
@@ -84,7 +84,7 @@ def create_listing(request):
 def listing_page(request, listing_id):
     list = Listing.objects.get(pk=listing_id)
     return render(request, "auctions/listing_page.html", {
-        "list": list
+        "list": list,
     })
 
 def place_bid(request, listing_id):
@@ -95,5 +95,24 @@ def place_bid(request, listing_id):
         
         return HttpResponseRedirect("listing_page")
 
-def 
+def in_wishlist(request, listing_id):
+    user = request.user
+    list = Listing.objects.get(pk=listing_id)
+    watchlist =  Watchlist.objects.filter(userwatchlist=user, listwatchlist=list).first()
+    if watchlist == None:
+        return True 
+
+
+def watchlist(request, listing_id):
+    if in_wishlist(request, listing_id):
+        userwatchlist = request.user
+        listwatchlist = Listing.objects.get(pk=listing_id)
+        watchlist = Watchlist.objects.create(userwatchlist=userwatchlist, listwatchlist=listwatchlist)
+        watchlist.save
+        return HttpResponseRedirect("listing_page")
+    else:
+        return redirect("auctions/listing_page.html")
+        
+    
+    
         

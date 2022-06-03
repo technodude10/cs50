@@ -10,7 +10,7 @@
     <div class="card h-100">
       <img class="card-img-top" src="{{ list.url}}" alt="{{ list.title }}" />
       <div class="card-body">
-        <h5 class="card-title">{{ list.title }}</h5>
+        <h5 class="card-title"><strong>{{ list.title }}</strong></h5>
         <p class="card-text">{{ list.desc}}</p>
         <a href="{% url 'listing_page' list.id %}" class="stretched-link"></a>
       </div>
