@@ -23,7 +23,11 @@ class Watchlist(models.Model):
         return f"{self.userwatchlist}, {self.listwatchlist}"
 
 class Bid(models.Model):
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE,  default='0', related_name="use")
+    list = models.ForeignKey(Listing, on_delete=models.CASCADE, default='0', related_name="list")
+    bid_value = models.FloatField(default='0')
+    def __str__(self):
+        return f"{self.user}, {self.list}, {self.bid}"
 
 class Comments(models.Model):
     pass

@@ -89,13 +89,22 @@ def listing_page(request, listing_id):
         "in_wishlist": in_wishlist(request, listing_id)
     })
 
+@login_required
 def place_bid(request, listing_id):
     if request.method == "POST":
-        bid_value = request.POST["bid_value"]
+        user = request.user
+        bid_value = float(request.POST["bid_value"])
         list = Listing.objects.get(pk=listing_id)
-        print(bid_value, list)
+
+        if bid_value > list.bid:
+            list.bid = bid_value
+            list.save()
+            return HttpResponseRedirect("listing_page")
+        # else:
+        #     return 
+
         
-        return HttpResponseRedirect("listing_page")
+        
 
 
 def in_wishlist(request, listing_id):
