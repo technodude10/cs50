@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -86,22 +87,27 @@ def listing_page(request, listing_id):
     list = Listing.objects.get(pk=listing_id)
     return render(request, "auctions/listing_page.html", {
         "list": list,
-        "in_wishlist": in_wishlist(request, listing_id)
+        "in_wishlist": in_wishlist(request, listing_id),
     })
 
 @login_required
 def place_bid(request, listing_id):
     if request.method == "POST":
         user = request.user
-        bid_value = float(request.POST["bid_value"])
+        try:
+            bid_value = float(request.POST["bid_value"])
+        except:
+            bid_value = 0
+
         list = Listing.objects.get(pk=listing_id)
 
         if bid_value > list.bid:
             list.bid = bid_value
             list.save()
             return HttpResponseRedirect("listing_page")
-        # else:
-        #     return 
+        else:
+            messages.success(request, 'Your bid is lower than current highest bid')
+            return HttpResponseRedirect("listing_page") 
 
         
         
