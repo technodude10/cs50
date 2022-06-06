@@ -106,13 +106,44 @@
   </div>
 </div>
 
-<div class="container">
+<div class="container ml-5">
     <h5><strong>Details:</strong></h5>
     <ul>
         <li>Listed by: {{ list.user.username }}</li>
         <li>Category: {{ list.category }}</li>
     </ul>
 </div>
+
+<div class="d-flex justify-content-center mx-5">
+  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+</div>
+
+
+  
+
+<div class="container ml-5 mt-5">
+  <h5><strong>Comments:</strong></h5>
+  <form action="{% url 'comments' list.id %}" method="post">
+      {% csrf_token %}
+      <div class="form-group">
+          <textarea class="form-control mx-auto" rows="2" cols="20"  maxlength="200" type="text" name="comment" placeholder="Add comment"></textarea>
+      </div>
+      <input class="btn btn-primary" type="submit" value="Comment">
+  </form>
+</div>
+
+<div class="container ml-3 mt-5">
+  <ul style="list-style-type:none;" >
+    {% for comment in comments %}
+    <li><strong>{{comment.user}}</strong>  <i class="ml-2"><small>{{ comment.date }}</small></i></li>
+    <li class="mb-3">{{comment.comment}}</li>
+    {% empty %}
+    <li>No Comments</li>
+    {% endfor %}
+  </ul>
+</div>
+
+
 
 
 {% endblock %}

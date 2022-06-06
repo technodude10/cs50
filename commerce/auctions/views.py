@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import User, Listing, Watchlist, Bid
+from .models import User, Listing, Watchlist, Bid, Comments
 
 
 def index(request):
@@ -110,13 +110,17 @@ def listing_page(request, listing_id):
     except:
         pass
 
+    #comment
+    comments = Comments.objects.filter(list=list)
+
     return render(request, "auctions/listing_page.html", {
         "list": list,
         "in_wishlist": in_wishlist(request, listing_id),
         "creatorclosed": creatorclosed,
         "listopen_or_close": list.open_or_close,
         "bidlen": bidlen,
-        "winner": winner
+        "winner": winner,
+        "comments": comments
     })
 
 @login_required
@@ -195,4 +199,12 @@ def if_creator(request, listing_id):
         return None
 
     
-        
+    
+def comments(request, listing_id):
+     if request.method == "POST":
+        comment = request.POST["comment"]
+        user = request.user
+        list = Listing.objects.get(pk=listing_id)
+        comments = Comments.objects.create(user=user, list=list, comment=comment)
+        comments.save()
+        return HttpResponseRedirect("listing_page")      
