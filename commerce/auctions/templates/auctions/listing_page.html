@@ -73,9 +73,9 @@
 
         <div>
         {% if not in_wishlist %}
-        <a class="btn btn-link mr-4 mb-2" href="{% url 'watchlist' list.id %}" role="button">Add to watchlist</a>
+        <a class="btn btn-light mr-4 mb-2" href="{% url 'watchlist' list.id %}" role="button">Add to watchlist</a>
         {% else %}
-        <a class="btn btn-link mr-4 mb-2" href="{% url 'watchlist' list.id %}" role="button">Remove from watchlist</a>
+        <a class="btn btn-light mr-4 mb-2" href="{% url 'watchlist' list.id %}" role="button">Remove from watchlist</a>
         {% endif %}
 
         {% else %}
