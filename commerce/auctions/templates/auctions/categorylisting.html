@@ -1,11 +1,11 @@
 {% extends "auctions/layout.html" %} {% block body %}
 
 <div class="mb-3">
-  <h2>Category: {{ category }}</h2>
+  <h2>Category: {{ categoryvalue }}</h2>
 </div>
 
 <div class="row row-cols-2 row-cols-md-4">
-  {% for list in categorylist %}
+  {% for list in categoryobj %}
   <div class="col mb-4">
     <div class="card h-100">
       <img class="card-img-top" src="{{ list.url}}" alt="{{ list.title }}" />

@@ -230,9 +230,10 @@ def categories(request):
     
 
 @login_required
-def category(request, category):
-    categoryobj = Listing.objects.filter(category=category)
-    return render(request, "auctions/categorylist.html", {
+def category(request, categoryvalue):
+    categoryobj = Listing.objects.filter(category=categoryvalue)
+    print(categoryobj)
+    return render(request, "auctions/categorylisting.html", {
         "categoryobj": categoryobj,
-        "categorylist": categorylist
+        "categoryvalue": categoryvalue
     })
