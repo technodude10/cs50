@@ -160,7 +160,7 @@ def in_wishlist(request, listing_id): # not a view
     try:
         user = request.user
         list = Listing.objects.get(pk=listing_id)
-        watchlist =  Watchlist.objects.filter(userwatchlist=user, listwatchlist=list).first()
+        watchlist =  Watchlist.objects.filter(user=user, list=list).first()
         if watchlist == None:
             return False
         else:
@@ -170,15 +170,15 @@ def in_wishlist(request, listing_id): # not a view
 
 @login_required
 def watchlist(request, listing_id):
-    userwatchlist = request.user
-    listwatchlist = Listing.objects.get(pk=listing_id)
+    user = request.user
+    list = Listing.objects.get(pk=listing_id)
 
     if not in_wishlist(request, listing_id):
-        watchlist = Watchlist.objects.create(userwatchlist=userwatchlist, listwatchlist=listwatchlist)
+        watchlist = Watchlist.objects.create(user=user, list=list)
         watchlist.save
         return HttpResponseRedirect("listing_page")
     else:
-        watchlist =  Watchlist.objects.filter(userwatchlist=userwatchlist, listwatchlist=listwatchlist).delete()
+        watchlist =  Watchlist.objects.filter(user=user, list=list).delete()
         return HttpResponseRedirect("listing_page")
 
 @login_required
@@ -208,3 +208,7 @@ def comments(request, listing_id):
         comments = Comments.objects.create(user=user, list=list, comment=comment)
         comments.save()
         return HttpResponseRedirect("listing_page")      
+
+@login_required
+def watchlist_view(request, listing_id):
+    return render(request, "auctions/watchlist.html")
