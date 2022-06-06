@@ -118,6 +118,7 @@
 
 <div class="container ml-2 mt-5">
   <h5><strong>Comments:</strong></h5>
+  {% if user.is_authenticated %}
   <form action="{% url 'comments' list.id %}" method="post">
       {% csrf_token %}
       <div class="form-group">
@@ -125,6 +126,7 @@
       </div>
       <input class="btn btn-primary" type="submit" value="Comment">
   </form>
+  {% endif %}
   <ul style="list-style-type:none; padding-left: 0;" class="mt-4" >
     {% for comment in comments %}
     <li><strong>{{comment.user}}</strong>  <i class="ml-2"><small>{{ comment.date }}</small></i></li>
