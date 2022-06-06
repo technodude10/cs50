@@ -23,8 +23,8 @@
     <div class="col-md-8">
       <div class="card-body">
         <h4 class="card-title"><strong>{{ list.title }}</strong></h4>
-        <p class="card-text mb-4">{{ list.desc }}</p>
-        <h3 class="card-text mb-4">
+        <p class="card-text mb-3">{{ list.desc }}</p>
+        <h3 class="card-text mb-3">
           <strong>${{ list.bid|floatformat:2 }}</strong>
         </h3>
         
@@ -59,7 +59,7 @@
             </div>
             <div>
               <input
-                class="btn btn-primary mb-3"
+                class="btn btn-primary mb-2"
                 type="submit"
                 value="Place Bid"
               />
@@ -73,13 +73,9 @@
 
         <div>
         {% if not in_wishlist %}
-          <a href="{% url 'watchlist' list.id %}" style="text-decoration: none;" > 
-            Add to watchlist
-          </a>
+        <a class="btn btn-link mr-4" href="{% url 'watchlist' list.id %}" role="button">Add to watchlist</a>
         {% else %}
-          <a href="{% url 'watchlist' list.id %}" style="text-decoration: none;" > 
-            Remove from watchlist
-          </a>
+        <a class="btn btn-link mr-4" href="{% url 'watchlist' list.id %}" role="button">Remove from watchlist</a>
         {% endif %}
 
         {% else %}
@@ -94,7 +90,7 @@
         {% endif %}
 
         {% if creatorclosed %}
-        <a class="btn btn-danger ml-5" href="{% url 'close' list.id %}" role="button">Close Listing</a>
+        <a class="btn btn-danger" href="{% url 'close' list.id %}" role="button">Close Listing</a>
         {% endif %}
           </div>
         
