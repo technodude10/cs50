@@ -10,15 +10,6 @@
     {% endfor %}
 {% endif %}
 
-<!-- {% if messages %}
-<div class="alert alert-danger text-center" role="alert">
-    {% for message in messages %}
-    <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-      {{ message }}
-    </div>
-    {% endfor %}
-</div>
-{% endif %} -->
 
 <div class="card m-5 border-0">
   <div class="row g-0">
@@ -38,6 +29,7 @@
         </h3>
         
         {% if user.is_authenticated %}
+        {% if listopen_or_close %}
 
         <p  class="mb-3" ><small> {{ bidlen }} bid(s) so far.
         {% if messages %}
@@ -48,7 +40,8 @@
         {% endfor %}
         {% endif %}
         </small></p>
-  
+        
+        
         <div>
           <form action="{% url 'place_bid' list.id %}" method="post">
             {% csrf_token %}
@@ -73,6 +66,8 @@
             </div>
           </form>
         </div>
+        
+
 
         <!-- Adds and removes from watchlist -->
 
@@ -87,7 +82,18 @@
           </a>
         {% endif %}
 
-        {% if closed %}
+        {% else %}
+
+        <div class="text-center">
+        <h3 class="mt-5 mb-4">Auction Closed</h3>
+        {% if winner %}
+        <h5>🎉 Congrats, you won this auction 🎉</h5>
+        {% endif %}
+        </div>
+
+        {% endif %}
+
+        {% if creatorclosed %}
         <a class="btn btn-danger ml-5" href="{% url 'close' list.id %}" role="button">Close Listing</a>
         {% endif %}
           </div>

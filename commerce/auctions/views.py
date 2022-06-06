@@ -83,27 +83,40 @@ def create_listing(request):
         return render(request, "auctions/create_listing.html")
 
 
+
 def listing_page(request, listing_id):
     list = Listing.objects.get(pk=listing_id)
     bid = Bid.objects.filter(list=list).order_by('-bid_value')
     bidlen = len(bid)
 
+    # current higgest bidder
     try:
         if request.user == bid.first().user:
             messages.info(request, 'Your bid is the current bid')
     except:
         pass
 
+    # if the creator has closed or not > only for creators
     if if_creator(request, listing_id) and list.open_or_close:
-        closed = True
+        creatorclosed = True
     else:
-        closed = False
+        creatorclosed = False
+
+    #Winner
+    winner = None
+    try:
+        if request.user == bid.first().user:
+            winner = bid.first().user
+    except:
+        pass
 
     return render(request, "auctions/listing_page.html", {
         "list": list,
         "in_wishlist": in_wishlist(request, listing_id),
-        "closed": closed,
-        "bidlen": bidlen
+        "creatorclosed": creatorclosed,
+        "listopen_or_close": list.open_or_close,
+        "bidlen": bidlen,
+        "winner": winner
     })
 
 @login_required
