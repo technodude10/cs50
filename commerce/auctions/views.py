@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import User, Listing, Watchlist
+from .models import User, Listing, Watchlist, Bid
 
 
 def index(request):
@@ -104,6 +104,13 @@ def place_bid(request, listing_id):
         if bid_value > list.bid:
             list.bid = bid_value
             list.save()
+            bid = Bid.objects.filter(user=user, list=list)
+
+            if bid.first() == None:
+                bid = Bid.objects.create(user=user, list=list, bid_value=bid_value)
+            else:
+                bid.bid_value = bid_value
+                
             return HttpResponseRedirect("listing_page")
         else:
             messages.success(request, 'Your bid is lower than current highest bid')
