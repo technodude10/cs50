@@ -85,9 +85,19 @@ def create_listing(request):
 
 def listing_page(request, listing_id):
     list = Listing.objects.get(pk=listing_id)
+    bid = Bid.objects.filter(list=list).order_by('-bid_value')
+    bidlen = len(bid)
+
+    try:
+        if request.user == bid.first().user:
+            messages.info(request, 'Your bid is the current bid')
+    except:
+        pass
+
     return render(request, "auctions/listing_page.html", {
         "list": list,
         "in_wishlist": in_wishlist(request, listing_id),
+        "bidlen": bidlen
     })
 
 @login_required
@@ -104,16 +114,22 @@ def place_bid(request, listing_id):
         if bid_value > list.bid:
             list.bid = bid_value
             list.save()
-            bid = Bid.objects.filter(user=user, list=list)
 
-            if bid.first() == None:
+            try:
+                bid = Bid.objects.get(user=user, list=list)
+            except:
+                bid = None
+
+            if bid == None:
                 bid = Bid.objects.create(user=user, list=list, bid_value=bid_value)
             else:
                 bid.bid_value = bid_value
+                bid.save()
                 
             return HttpResponseRedirect("listing_page")
+
         else:
-            messages.success(request, 'Your bid is lower than current highest bid')
+            messages.error(request, 'Your bid is lower than current bid')
             return HttpResponseRedirect("listing_page") 
 
         
