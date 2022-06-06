@@ -20,8 +20,6 @@
 </div>
 {% endif %} -->
 
-
-
 <div class="card m-5 border-0">
   <div class="row g-0">
     <div class="col-md-4">
@@ -38,6 +36,7 @@
         <h3 class="card-text mb-4">
           <strong>${{ list.bid|floatformat:2 }}</strong>
         </h3>
+        
         {% if user.is_authenticated %}
 
         <p  class="mb-3" ><small> {{ bidlen }} bid(s) so far.
@@ -77,20 +76,21 @@
 
         <!-- Adds and removes from watchlist -->
 
-        {% if not in_wishlist %}
         <div>
+        {% if not in_wishlist %}
           <a href="{% url 'watchlist' list.id %}" style="text-decoration: none;" > 
             Add to watchlist
           </a>
-        </div>
         {% else %}
-        <div>
           <a href="{% url 'watchlist' list.id %}" style="text-decoration: none;" > 
             Remove from watchlist
           </a>
-        </div>
         {% endif %}
 
+        {% if closed %}
+        <a class="btn btn-danger ml-5" href="{% url 'close' list.id %}" role="button">Close Listing</a>
+        {% endif %}
+          </div>
         
         {% else %}
         <a href="{% url 'login' %}" style="text-decoration: none;">Login to place bid</a>
@@ -103,7 +103,7 @@
 <div class="container">
     <h5><strong>Details:</strong></h5>
     <ul>
-        <li>Listed by: {{ list.userid.username }}</li>
+        <li>Listed by: {{ list.user.username }}</li>
         <li>Category: {{ list.category }}</li>
     </ul>
 </div>

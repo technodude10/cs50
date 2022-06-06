@@ -10,7 +10,7 @@ from .models import User, Listing, Watchlist, Bid
 
 
 def index(request):
-    listing = Listing.objects.all()
+    listing = Listing.objects.filter(open_or_close = True)
     return render(request, "auctions/index.html", {
         "listing": listing
     })
@@ -74,8 +74,8 @@ def create_listing(request):
         bid = request.POST["bid"]
         url = request.POST["url"]
         category = request.POST["category"]
-        userid = request.user
-        listing = Listing.objects.create(title=title, desc=desc, bid=bid, url=url, category=category, userid=userid)
+        user = request.user
+        listing = Listing.objects.create(title=title, desc=desc, bid=bid, url=url, category=category, user=user)
         listing.save()
         return HttpResponseRedirect(reverse("index"))
 
@@ -94,9 +94,15 @@ def listing_page(request, listing_id):
     except:
         pass
 
+    if if_creator(request, listing_id) and list.open_or_close:
+        closed = True
+    else:
+        closed = False
+
     return render(request, "auctions/listing_page.html", {
         "list": list,
         "in_wishlist": in_wishlist(request, listing_id),
+        "closed": closed,
         "bidlen": bidlen
     })
 
@@ -132,11 +138,8 @@ def place_bid(request, listing_id):
             messages.error(request, 'Your bid is lower than current bid')
             return HttpResponseRedirect("listing_page") 
 
-        
-        
 
-
-def in_wishlist(request, listing_id):
+def in_wishlist(request, listing_id): # not a view
     try:
         user = request.user
         list = Listing.objects.get(pk=listing_id)
@@ -161,7 +164,22 @@ def watchlist(request, listing_id):
         watchlist =  Watchlist.objects.filter(userwatchlist=userwatchlist, listwatchlist=listwatchlist).delete()
         return HttpResponseRedirect("listing_page")
 
+@login_required
+def close(request, listing_id):
+    user = request.user
+    list = Listing.objects.get(pk=listing_id, user=user, open_or_close=True)
+    list.open_or_close = False
+    list.save()
+    return redirect("index")
+
         
-    
+def if_creator(request, listing_id):
+    user = request.user
+    list = Listing.objects.get(pk=listing_id)
+    if list.user == user:
+        return True
+    else:
+        return None
+
     
         

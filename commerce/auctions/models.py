@@ -11,7 +11,8 @@ class Listing(models.Model):
     bid = models.FloatField(default="0")
     url = models.URLField(max_length=200)
     category = models.CharField(max_length=200, blank=True) 
-    userid = models.ForeignKey(User, on_delete=models.CASCADE, related_name="userid")
+    open_or_close = models.BooleanField(default=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="userid")
     def __str__(self):
         return f"{self.title}, {self.desc}, {self.bid}, {self.url}"
 
