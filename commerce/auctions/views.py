@@ -1,4 +1,3 @@
-from typing import List
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -10,8 +9,8 @@ from django.contrib.auth.decorators import login_required
 from .models import User, Listing, Watchlist, Bid, Comments
 
 
-
-categorylist = ['electronics', 'art', 'toys', 'fashion']
+categorylist = ['electronics', 'art', 'toys', 'fashion', 'dress']
+categorylist.sort()
 
 def index(request):
     listing = Listing.objects.filter(open_or_close = True)
@@ -223,6 +222,7 @@ def watchlist_view(request):
         "watchlists": watchlist
     })
 
+@login_required
 def categories(request):
     return render(request, "auctions/categories.html", {
         "categorylist": categorylist
@@ -232,7 +232,6 @@ def categories(request):
 @login_required
 def category(request, categoryvalue):
     categoryobj = Listing.objects.filter(category=categoryvalue)
-    print(categoryobj)
     return render(request, "auctions/categorylisting.html", {
         "categoryobj": categoryobj,
         "categoryvalue": categoryvalue
