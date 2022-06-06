@@ -27,9 +27,9 @@
             <div class="form-group">
                 <select name="category" class="form-select form-select-lg mb-3 w-50">
                     <option selected>Category</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="art">Art</option>
-                    <option value="toys">Toys</option>
+                    {% for category in categories %}
+                    <option value="{{category}}">{{category}}</option>
+                    {% endfor %}
                   </select>
             </div>
             <input class="btn btn-primary" type="submit" value="Create">

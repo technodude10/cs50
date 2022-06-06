@@ -1,3 +1,4 @@
+from typing import List
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -8,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 
 from .models import User, Listing, Watchlist, Bid, Comments
 
+
+
+categorylist = ['electronics', 'art', 'toys', 'fashion']
 
 def index(request):
     listing = Listing.objects.filter(open_or_close = True)
@@ -80,7 +84,9 @@ def create_listing(request):
         return HttpResponseRedirect(reverse("index"))
 
     else:
-        return render(request, "auctions/create_listing.html")
+        return render(request, "auctions/create_listing.html", {
+            "categories" : categorylist 
+        })
 
 
 
@@ -210,5 +216,23 @@ def comments(request, listing_id):
         return HttpResponseRedirect("listing_page")      
 
 @login_required
-def watchlist_view(request, listing_id):
-    return render(request, "auctions/watchlist.html")
+def watchlist_view(request):
+    user = request.user
+    watchlist = Watchlist.objects.filter(user=user)
+    return render(request, "auctions/watchlist.html", {
+        "watchlists": watchlist
+    })
+
+def categories(request):
+    return render(request, "auctions/categories.html", {
+        "categorylist": categorylist
+        })
+    
+
+@login_required
+def category(request, category):
+    categoryobj = Listing.objects.filter(category=category)
+    return render(request, "auctions/categorylist.html", {
+        "categoryobj": categoryobj,
+        "categorylist": categorylist
+    })

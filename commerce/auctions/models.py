@@ -10,7 +10,7 @@ class Listing(models.Model):
     desc = models.CharField(max_length=200)
     bid = models.FloatField(default="0")
     url = models.URLField(max_length=200)
-    category = models.CharField(max_length=200, blank=True) 
+    category = models.CharField(max_length=200) 
     open_or_close = models.BooleanField(default=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="userid")
     def __str__(self):
