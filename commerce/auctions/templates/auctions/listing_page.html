@@ -75,7 +75,7 @@
         {% if not in_wishlist %}
         <a class="btn btn-light mr-4 mb-2" href="{% url 'watchlist' list.id %}" role="button">Add to watchlist</a>
         {% else %}
-        <a class="btn btn-light mr-4 mb-2" href="{% url 'watchlist' list.id %}" role="button">Remove from watchlist</a>
+        <a class="btn btn-outline-danger mr-4 mb-2" href="{% url 'watchlist' list.id %}" role="button">Remove from watchlist</a>
         {% endif %}
 
         {% else %}
@@ -90,7 +90,7 @@
         {% endif %}
 
         {% if creatorclosed %}
-        <a class="btn btn-danger mb-2" href="{% url 'close' list.id %}" role="button">Close Listing</a>
+        <a class="btn btn-outline-danger mb-2" href="{% url 'close' list.id %}" role="button">Close Listing</a>
         {% endif %}
           </div>
         
