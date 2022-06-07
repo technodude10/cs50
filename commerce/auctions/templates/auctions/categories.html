@@ -4,6 +4,7 @@
   <h2>Categories</h2>
 </div>
 
+<!-- displays an unordered list with different categories as links -->
 <ul> 
   {% for catgry in categorylist %}
   <li><a href="{% url 'category' catgry %}">{{ catgry | title }}</a></li>

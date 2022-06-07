@@ -1,5 +1,6 @@
 {% extends "auctions/layout.html" %} {% block body %}
 
+<!-- alert messages -->
 {% if messages %}
     {% for message in messages %}
         {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
@@ -10,7 +11,7 @@
     {% endfor %}
 {% endif %}
 
-
+<!-- details of the listing -->
 <div class="card m-5 border-0">
   <div class="row g-0">
     <div class="col-md-4">
@@ -28,6 +29,7 @@
           <strong>${{ list.bid|floatformat:2 }}</strong>
         </h3>
         
+         <!-- different if functions used to display things only when conditions are satisfied -->
         {% if user.is_authenticated %}
         {% if listopen_or_close %}
 
@@ -41,7 +43,7 @@
         {% endif %}
         </small></p>
         
-        
+         <!-- from to enter the bid value -->
         <div>
           <form action="{% url 'place_bid' list.id %}" method="post">
             {% csrf_token %}
@@ -80,6 +82,7 @@
 
         {% else %}
 
+        <!-- displays auction closed and show the winner that he won -->
         <div class="text-center">
         <h3 class="mt-5 mb-4">Auction Closed</h3>
         {% if winner %}
@@ -89,11 +92,12 @@
 
         {% endif %}
 
+        <!-- close the listing > won't be visible in active listing page -->
         {% if creatorclosed %}
         <a class="btn btn-outline-danger btn-sm mb-2" href="{% url 'close' list.id %}" role="button">Close Listing</a>
         {% endif %}
           </div>
-        
+      
         {% else %}
         <a href="{% url 'login' %}" style="text-decoration: none;">Login to place bid</a>
         {% endif %}
@@ -101,6 +105,7 @@
     </div>
   </div>
 </div>
+
 
 <div class="container ml-3">
     <h5><strong>Details:</strong></h5>
@@ -115,7 +120,7 @@
 </div>
 
 
-
+<!-- comment section -->
 <div class="container ml-2 mt-5">
   <h5><strong>Comments:</strong></h5>
   {% if user.is_authenticated %}

@@ -1,17 +1,20 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import User, Listing, Watchlist, Bid, Comments
+# imports models from models.py
+from .models import User, Listing, Watchlist, Bid, Comments 
 
 
-categorylist = ['electronics', 'art', 'toys', 'fashion', 'dress']
+# a list of all categories in sorted list
+categorylist = ['electronics', 'art', 'toys', 'fashion']
 categorylist.sort()
 
+# index page -> displays all the active listings
 def index(request):
     listing = Listing.objects.filter(open_or_close = True)
     return render(request, "auctions/index.html", {
@@ -70,9 +73,11 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+# create a listing
 def create_listing(request):
     if request.method == "POST":
 
+        # checks if neccessary fields are filled or not
         title = request.POST["title"]
         if title == '':
             messages.error(request, 'Enter a title for the listing')
@@ -104,8 +109,10 @@ def create_listing(request):
 
         category = request.POST["category"]
 
+        # get currently logged user details
         user = request.user
-        
+
+        # saves listing to listing database
         listing = Listing.objects.create(title=title, desc=desc, bid=bid, url=url, category=category, user=user)
         listing.save()
         return HttpResponseRedirect(reverse("index"))
@@ -116,7 +123,7 @@ def create_listing(request):
         })
 
 
-
+# In detail listing of each listings
 def listing_page(request, listing_id):
     list = Listing.objects.get(pk=listing_id)
     bid = Bid.objects.filter(list=list).order_by('-bid_value')
@@ -156,17 +163,22 @@ def listing_page(request, listing_id):
         "comments": comments
     })
 
+# Collects the bid entered by the user and performs validation before adding to database
 @login_required
 def place_bid(request, listing_id):
     if request.method == "POST":
         user = request.user
+
+        # gets bid value, if no bid is given try except is used to pass 0 as the bid value
         try:
             bid_value = float(request.POST["bid_value"])
         except:
             bid_value = 0
 
+        # get listing details of specific listing based on its listing id
         list = Listing.objects.get(pk=listing_id)
 
+        # checks if bid value is larger than current value
         if bid_value > list.bid:
             list.bid = bid_value
             list.save()
@@ -176,6 +188,7 @@ def place_bid(request, listing_id):
             except:
                 bid = None
 
+            # creates a new bid database listing or updates existing ones
             if bid == None:
                 bid = Bid.objects.create(user=user, list=list, bid_value=bid_value)
             else:
@@ -185,11 +198,13 @@ def place_bid(request, listing_id):
             return HttpResponseRedirect("listing_page")
 
         else:
+            # messages to notify the user 
             messages.error(request, 'Your bid is lower than current bid')
             return HttpResponseRedirect("listing_page") 
 
 
-def in_wishlist(request, listing_id): # not a view
+# a funtion to determine if a listing is watchlisted by the user or not
+def in_wishlist(request, listing_id): 
     try:
         user = request.user
         list = Listing.objects.get(pk=listing_id)
@@ -201,6 +216,7 @@ def in_wishlist(request, listing_id): # not a view
     except:
         return None
 
+# allows user to add/remove a listing from watchlist
 @login_required
 def watchlist(request, listing_id):
     user = request.user
@@ -214,6 +230,7 @@ def watchlist(request, listing_id):
         watchlist =  Watchlist.objects.filter(user=user, list=list).delete()
         return HttpResponseRedirect("listing_page")
 
+# allows the creator of a listing to close it and thus declaring the highest bidder the winner
 @login_required
 def close(request, listing_id):
     user = request.user
@@ -222,7 +239,7 @@ def close(request, listing_id):
     list.save()
     return redirect("index")
 
-        
+# a funtion to check if the list is created by the logged in user or not        
 def if_creator(request, listing_id):
     user = request.user
     list = Listing.objects.get(pk=listing_id)
@@ -231,8 +248,8 @@ def if_creator(request, listing_id):
     else:
         return None
 
-    
-    
+# allows user to comment on listings   
+@login_required    
 def comments(request, listing_id):
      if request.method == "POST":
         comment = request.POST["comment"]
@@ -242,6 +259,7 @@ def comments(request, listing_id):
         comments.save()
         return HttpResponseRedirect("listing_page")      
 
+# a page that lists all the watchlisted items
 @login_required
 def watchlist_view(request):
     user = request.user
@@ -250,13 +268,14 @@ def watchlist_view(request):
         "watchlists": watchlist
     })
 
+# a page that displays all the different categories as links
 @login_required
 def categories(request):
     return render(request, "auctions/categories.html", {
         "categorylist": categorylist
         })
     
-
+# a page that lists all the listings that come under a specific category
 @login_required
 def category(request, categoryvalue):
     categoryobj = Listing.objects.filter(category=categoryvalue)
