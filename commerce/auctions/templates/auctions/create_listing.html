@@ -6,23 +6,34 @@
         <h2>Create Listing</h2>
     </div>
 
-    {% if message %}
-        <div>{{ message }}</div>
+    {% if messages %}
+    {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-danger text-center" role="alert">
+          {{ message }}
+        </div>
+       {% endif %}
+    {% endfor %}
     {% endif %}
+
     <div class="d-flex justify-content-center">
         <form action="{% url 'create_listing' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
-                <input class="form-control" autofocus type="text" maxlength="200" name="title" placeholder="Title">
+                <label for="title">Title: </label>
+                <input class="form-control" autofocus type="text" required maxlength="200" name="title" placeholder="Title">
             </div>
             <div class="form-group">
-                <textarea class="form-control" rows="4" cols="50" maxlength="200" type="text" name="desc" placeholder="Description"></textarea>
+                <label for="desc">Description: </label>
+                <textarea class="form-control" rows="4" cols="50" required  maxlength="200" type="text" name="desc" placeholder="Description"></textarea>
             </div>
             <div class="form-group">
-                <input class="form-control w-50" type="number" min="1" step=0.01 maxlength="200" name="bid" placeholder="Starting Bid in USD">
+                <label for="bid">Starting Bid in USD: </label>
+                <input class="form-control w-50" type="number" min="1"  required  step=0.01 maxlength="200" name="bid" value="0" placeholder="Starting Bid in USD">
             </div>
             <div class="form-group">
-                <input class="form-control w-50" type="url" name="url" maxlength="200" placeholder="Link to Image">
+                <label for="url">Link to Image: </label>
+                <input class="form-control w-50" type="url" name="url" required  maxlength="200" placeholder="Link to Image">
             </div>
             <div class="form-group">
                 <select name="category" class="form-select form-select-lg mb-3 w-50">

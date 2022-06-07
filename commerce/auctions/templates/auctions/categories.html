@@ -6,7 +6,7 @@
 
 <ul> 
   {% for catgry in categorylist %}
-  <li><a href="{% url 'category' catgry %}">{{ catgry }}</a></li>
+  <li><a href="{% url 'category' catgry %}">{{ catgry | title }}</a></li>
   {% empty %}
   <p>No Category</p>
   {% endfor %}

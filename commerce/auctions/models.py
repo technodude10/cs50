@@ -8,7 +8,7 @@ class User(AbstractUser):
 class Listing(models.Model):
     title = models.CharField(max_length=200)
     desc = models.CharField(max_length=200)
-    bid = models.FloatField(default="0")
+    bid = models.FloatField(default=0)
     url = models.URLField(max_length=200)
     category = models.CharField(max_length=200) 
     open_or_close = models.BooleanField(default=True)

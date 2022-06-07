@@ -72,12 +72,40 @@ def register(request):
 
 def create_listing(request):
     if request.method == "POST":
+
         title = request.POST["title"]
+        if title == '':
+            messages.error(request, 'Enter a title for the listing')
+            return render(request, "auctions/create_listing.html", {
+            "categories" : categorylist 
+        })
+
         desc = request.POST["desc"]
+        if desc == '':
+            messages.error(request, 'Enter a description for the listing')
+            return render(request, "auctions/create_listing.html", {
+            "categories" : categorylist 
+        })
+
         bid = request.POST["bid"]
+
+        if bid == '':
+            messages.error(request, 'Enter a bid for the listing')
+            return render(request, "auctions/create_listing.html", {
+            "categories" : categorylist 
+        })
+
         url = request.POST["url"]
+        if url == '':
+            messages.error(request, 'Enter a image url for the listing')
+            return render(request, "auctions/create_listing.html", {
+            "categories" : categorylist 
+        })
+
         category = request.POST["category"]
+
         user = request.user
+        
         listing = Listing.objects.create(title=title, desc=desc, bid=bid, url=url, category=category, user=user)
         listing.save()
         return HttpResponseRedirect(reverse("index"))
