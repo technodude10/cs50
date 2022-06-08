@@ -62,7 +62,7 @@ function load_mailbox(mailbox) {
         emails.forEach(email => {
           
             const element = document.createElement('div');
-            element.className = "border rounded border-light bg-light text-dark m-1";
+            element.className = "border rounded border-light bg-light text-dark m-1 p-2";
             element.innerHTML = `<p style="display:inline" class="font-weight-bold mr-3">${email.sender}</p><p style="display:inline" class="mr-3" >${email.subject}</p><p  style="display:inline" class="font-weight-light text-right">${email.timestamp}</p>`;
             element.addEventListener('click', function() {
                 console.log('This element has been clicked!')
