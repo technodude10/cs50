@@ -42,9 +42,8 @@ function compose_email() {
       .then((result) => {
         // Print result
         console.log(result);
+        load_mailbox("sent");
       });
-
-    load_mailbox("sent");
     return false;
   };
 }
@@ -66,10 +65,9 @@ function load_mailbox(mailbox) {
         const element = document.createElement("div");
         if (email.read === true) {
           element.className =
-            "border rounded border-light bg-secondary text-dark m-1 p-2";
+            "border rounded border-dark bg-secondary text-dark  p-2";
         } else {
-          element.className =
-            "border rounded border-light bg-light text-dark m-1 p-2";
+          element.className = "border rounded border-dark text-dark p-2";
         }
         element.setAttribute("id", `id${email.id}`);
         element.innerHTML = `<p style="display:inline" class="font-weight-bold mr-3">${email.sender}</p><p style="display:inline" class="mr-3" >${email.subject}</p><small style="float:right;" class="font-weight-light text-end">${email.timestamp}</small>`;
@@ -88,7 +86,10 @@ function load_mailbox(mailbox) {
             body: JSON.stringify({
               read: on_off,
             }),
-          }).then(() => load_mailbox(mailbox));
+          }).then(() => {
+            const classelement = document.querySelector(`#id${email.id}`).classList;
+            classelement.toggle("bg-secondary");
+          });
         });
         document.querySelector("#emails-view").append(element);
       });
