@@ -115,6 +115,8 @@ function load_email(mailbox, email_id) {
       <button class="btn btn-sm btn-outline-primary" id="reply">Reply</button>
       <hr><p>${email.body}</p>`;
 
+      
+
       // Archive/Unarchive button
       const archive = document.createElement("div");
       let archived_or_not = true;
@@ -130,6 +132,9 @@ function load_email(mailbox, email_id) {
       }
       document.querySelector("#email").append(element, archive);
 
+      // Reply button function
+      document.querySelector("#reply").addEventListener("click", () => load_reply(mailbox, email.id));
+
       // Archive/Unarchive function
       document.querySelector("#archive").addEventListener("click", () => {
         fetch(`/emails/${email_id}`, {
@@ -143,4 +148,9 @@ function load_email(mailbox, email_id) {
         })
       });
     });
+}
+
+function load_reply(mailbox, email_id) {
+
+
 }
