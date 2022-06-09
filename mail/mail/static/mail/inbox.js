@@ -76,7 +76,6 @@ function load_mailbox(mailbox) {
 
         element.addEventListener("click", function () {
           console.log("This element has been clicked!");
-          
 
           if (email.read === true) {
             on_off = false;
@@ -87,11 +86,9 @@ function load_mailbox(mailbox) {
           fetch(`/emails/${email.id}`, {
             method: "PUT",
             body: JSON.stringify({
-            read: on_off,
-            })
-          })
-          .then(() => load_mailbox(mailbox))
-          
+              read: on_off,
+            }),
+          }).then(() => load_mailbox(mailbox));
         });
         document.querySelector("#emails-view").append(element);
       });
