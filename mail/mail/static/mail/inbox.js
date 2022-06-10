@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
   load_mailbox("inbox");
 });
 
-function compose_email(email_details) {
+function compose_email(x, email_details) {
 
 
 
@@ -29,19 +29,23 @@ function compose_email(email_details) {
   document.querySelector("#compose-subject").value = "";
   document.querySelector("#compose-body").value = "";
 
-  console.log(email_details);
-
-
   
+  if (email_details !== undefined) {
 
-  // if (email !== null) {
+    // fill composition fields
+    document.querySelector("#compose-recipients").value = email_details.sender;
 
-  //   // fill composition fields
-  //   document.querySelector("#compose-recipients").value = email.sender;
-  //   document.querySelector("#compose-subject").value = email.subject;
-  //   document.querySelector("#compose-body").value = email.body;
+    if ( email_details.subject.charAt(0) === 'R' && email_details.subject.charAt(1) === 'e' && email_details.subject.charAt(2) === ':') {
+      document.querySelector("#compose-subject").value = `${email_details.subject}`;
+    } else {
+      document.querySelector("#compose-subject").value = `Re: ${email_details.subject}`;
+    }
+  
+    let previous_email = `On ${email_details.timestamp} ${email_details.sender} wrote:\r\n${email_details.body} \r\n \r\n On ${email_details.timestamp} ${email_details.recipients} wrote:\r\n \r\n`;
+    document.querySelector("#compose-body").value = previous_email;
 
-  // }
+  }
+
 
   document.querySelector("#compose-form").onsubmit = () => {
     const recipients = document.querySelector("#compose-recipients").value;
@@ -150,7 +154,7 @@ function load_email(mailbox, email_id) {
       document.querySelector("#email").append(element, archive);
 
       // Reply button function
-      document.querySelector("#reply").addEventListener("click", () => compose_email(email));
+      document.querySelector("#reply").addEventListener("click", () => compose_email("pointerevent", email));
 
       // Archive/Unarchive function
       document.querySelector("#archive").addEventListener("click", () => {
