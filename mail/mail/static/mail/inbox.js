@@ -30,18 +30,21 @@ function compose_email(x, email_details) {
   document.querySelector("#compose-body").value = "";
 
   
+  // if there is an argument with the compose_email function execute below given code
   if (email_details !== undefined) {
 
     // fill composition fields
     document.querySelector("#compose-recipients").value = email_details.sender;
 
+    // if Re: already present do not add it otherwise add it
     if ( email_details.subject.charAt(0) === 'R' && email_details.subject.charAt(1) === 'e' && email_details.subject.charAt(2) === ':') {
       document.querySelector("#compose-subject").value = `${email_details.subject}`;
     } else {
       document.querySelector("#compose-subject").value = `Re: ${email_details.subject}`;
     }
-  
-    let previous_email = `On ${email_details.timestamp} ${email_details.sender} wrote:\r\n${email_details.body} \r\n \r\n On ${email_details.timestamp} ${email_details.recipients} wrote:\r\n \r\n`;
+    
+    // add previous email body to reply section
+    let previous_email = `[On ${email_details.timestamp} ${email_details.sender} wrote:\r\n${email_details.body}] \r\n ___________________________________________________________________________________________________________________________________________________________________\r\n \r\n`;
     document.querySelector("#compose-body").value = previous_email;
 
   }
@@ -52,6 +55,7 @@ function compose_email(x, email_details) {
     const subject = document.querySelector("#compose-subject").value;
     const body = document.querySelector("#compose-body").value;
 
+    // submit email details via post
     fetch("/emails", {
       method: "POST",
       body: JSON.stringify({
@@ -64,6 +68,7 @@ function compose_email(x, email_details) {
       .then((result) => {
         // Print result
         console.log(result);
+        // then load sent mailbox
         load_mailbox("sent");
       });
     return false;
@@ -82,6 +87,7 @@ function load_mailbox(mailbox) {
     mailbox.charAt(0).toUpperCase() + mailbox.slice(1)
   }</h3>`;
 
+  // get emails from database & format them for mailbox view
   fetch(`/emails/${mailbox}`)
     .then((response) => response.json())
     .then((emails) => {
@@ -96,14 +102,17 @@ function load_mailbox(mailbox) {
         element.setAttribute("id", `id${email.id}`);
         element.innerHTML = `<p style="display:inline" class="font-weight-bold mr-3">${email.sender}</p><p style="display:inline" class="mr-3" >${email.subject}</p><small style="float:right;" class="font-weight-light text-end">${email.timestamp}</small>`;
 
+        // when a mail is clicked execute code below
         element.addEventListener("click", function () {
           console.log("This element has been clicked!");
 
+          // set read as true
           fetch(`/emails/${email.id}`, {
             method: "PUT",
             body: JSON.stringify({
               read: true,
             }),
+            // then load corresponding mail view
           }).then(() => {
             load_email(mailbox, email.id);
           });
@@ -113,20 +122,23 @@ function load_mailbox(mailbox) {
     });
 }
 
+// displays the email in its entirety 
 function load_email(mailbox, email_id) {
   document.querySelector("#emails-view").style.display = "none";
   document.querySelector("#compose-view").style.display = "none";
   document.querySelector("#email").style.display = "block";
 
-
+  // set innerHTML to blank to avoid repeated appending of html element
   document.querySelector("#email").innerHTML = "";
 
+  // get email details corresponding to the email id
   fetch(`/emails/${email_id}`)
     .then((response) => response.json())
     .then((email) => {
       // Print email
       console.log(email);
 
+      // create a div element with data and append it to email element
       const element = document.createElement("div");
       element.setAttribute("id", `emailid${email.id}`);
       element.innerHTML = `<h3>${email.subject}</h3>
