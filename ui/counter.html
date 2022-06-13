@@ -17,12 +17,17 @@
         
 
         function App() {
-            const x = 1;
-            const y = 2;
+
+            const [count, setCount] = React.useState(0);
+
+            function updateCount() {
+                setCount(count + 1);
+            }
+
             return (
                 <div>
-                    <div>0</div>
-                    <button>Count</button>
+                    <div>{count}</div>
+                    <button onClick={updateCount}>Count</button>
                 </div>
             );
         }
