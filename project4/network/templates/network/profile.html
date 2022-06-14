@@ -1,0 +1,46 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+ 
+<div class="container">
+<div class="card mb-3 border-0 mb-5">
+    <div class="row g-0">
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{profile.username}}</h5>
+          <p class="card-text">user bio : Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+
+          <div class="container">
+            <div class="row text-muted">
+              <div class="col-6 col-sm-4"><strong>{{ followingcount }}</strong> Following</div>
+              <div class="col-6 col-sm-4"><strong>{{ followercount }}</strong> Followers</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% for post in newpost %}
+<div class="container">
+<div class="card mx-5 mb-1">
+  <div class="card-body">
+    <div>
+        <p style="display:inline" class="font-weight-bold mr-3"><strong>{{post.user}}</strong></p>
+        <small style="float:right;" class=" text-muted text-end">{{post.date}}</small>
+        <p class="my-2">{{post.content }}</p>
+        
+          <div class="row row-cols-3 mt-3">
+            <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-pen-to-square"></i></a></div>
+            <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-heart" style="color:red"></i></a></div>
+            <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-comment"></i></a></div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}

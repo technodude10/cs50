@@ -3,12 +3,16 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
-from .models import User
+from .models import Follow, User, Newpost
 
 
 def index(request):
-    return render(request, "network/index.html")
+    newpost = Newpost.objects.all().order_by('-date')
+    return render(request, "network/index.html", {
+        "newpost": newpost
+    })
 
 
 def login_view(request):
@@ -61,3 +65,33 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+@login_required 
+def newpost(request):
+    if request.method == "POST":
+        content = request.POST["content"]
+
+        user = request.user
+
+        newpost = Newpost.objects.create(user=user, content=content)
+        newpost.save()
+
+        return HttpResponseRedirect(reverse("index"))
+
+def profile(request, user_id):
+    newpost = Newpost.objects.filter(user=user_id).order_by('-date')
+    user = User.objects.get(id=user_id)
+    try:
+        follow = Follow.objects.get(user=user_id)
+        followercount = len(follow.follower.all())
+        followingcount = len(follow.following.all())
+    except:
+        followercount = 0
+        followingcount = 0
+    
+    return render(request, "network/profile.html", {
+        "newpost": newpost,
+        "profile": user,
+        "followercount": followercount,
+        "followingcount": followingcount
+    })
