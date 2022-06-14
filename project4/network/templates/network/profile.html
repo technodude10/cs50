@@ -1,22 +1,29 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
- 
-<div class="container">
-<div class="card mb-3 border-0 mb-5">
+
+{% load static %}
+
+
+<div class="d-flex justify-content-center my-4">
+
+  <div class="card mb-3 border-0" style="max-width: 700px;">
     <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{% static 'network/user.png' %}" class="img-fluid rounded-start" width="200" alt="user">
+      </div>
       <div class="col-md-8">
         <div class="card-body">
           <h5 class="card-title">{{profile.username}}</h5>
-          <p class="card-text">user bio : Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-
-          <div class="container">
-            <div class="row text-muted">
-              <div class="col-6 col-sm-4"><strong>{{ followingcount }}</strong> Following</div>
-              <div class="col-6 col-sm-4"><strong>{{ followercount }}</strong> Followers</div>
-            </div>
+          <p class="card-text">This is the users bio. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+            <div class="row text-muted mb-2">
+              <div class="col-6 col-sm-3"><strong>{{ followingcount }}</strong> Following</div>
+              <div class="col-6 col-sm-3"><strong>{{ followercount }}</strong> Followers</div>
           </div>
-
+          <div id="follow_button">
+            <!-- <button type="button" class="btn btn-primary btn-sm">Follow</button>
+            <button type="button" class="btn btn-outline-primary btn-sm">Unfollow</button> -->
+          </div>
         </div>
       </div>
     </div>
@@ -24,8 +31,8 @@
 </div>
 
 {% for post in newpost %}
-<div class="container">
-<div class="card mx-5 mb-1">
+<div class="d-flex align-items-center justify-content-center">
+<div class="card w-50 mx-5 mb-1">
   <div class="card-body">
     <div>
         <p style="display:inline" class="font-weight-bold mr-3"><strong>{{post.user}}</strong></p>
@@ -42,5 +49,31 @@
   </div>
 </div>
 {% endfor %}
+
+
+<script type="text/babel">
+
+  function App() {
+
+      function follow_button() {
+
+        let buttonvalue = document.querySelector('#buttonfollow').innerHTML;
+
+        if (buttonvalue === "Follow") {
+          document.querySelector('#buttonfollow').innerHTML =   "Unfollow";
+        } else {
+          document.querySelector('#buttonfollow').innerHTML =   "Follow";
+        };
+        
+      };
+
+      return (
+        <button onClick={follow_button} type="button" id="buttonfollow" class="btn btn-outline-primary btn-sm">Follow</button>
+      );
+  };
+
+  ReactDOM.render(<App />, document.querySelector("#follow_button"));
+
+</script>
 
 {% endblock %}

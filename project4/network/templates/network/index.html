@@ -9,33 +9,7 @@
     {% endif %}
 
 
-{% if user.is_authenticated %}
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New Post</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-        <form action="{% url 'newpost' %}" method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <textarea class="form-control" id="content" name="content" rows="2"></textarea>
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Post</button>
-                </div>
-            </form>
-        </div>
-      </div>
-    </div>
-  </div>
 
-{% endif %}
 
 <hr>
 
@@ -47,15 +21,15 @@
 
 
 {% for post in newpost %}
-<div class="container">
-<div class="card mx-5 mb-1">
+<div class="d-flex justify-content-center">
+  <div class="card w-50 mx-5 mb-1">
   <div class="card-body">
     <div>
         <p style="display:inline" class="font-weight-bold mr-3"><a href="{% url 'profile' post.user.id %}" style="color: inherit; text-decoration:none; "><strong>{{post.user}}</strong></a></p>
         <small style="float:right;" class=" text-muted text-end">{{post.date}}</small>
         <p class="my-2">{{post.content }}</p>
         
-          <div class="row row-cols-3 mt-3">
+          <div class="row row-cols-6 mt-3">
             <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-pen-to-square"></i></a></div>
             <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-heart" style="color:red"></i></a></div>
             <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-comment"></i></a></div>
