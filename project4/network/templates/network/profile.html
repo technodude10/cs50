@@ -1,31 +1,35 @@
-{% extends "network/layout.html" %}
-
-{% block body %}
-
-{% load static %}
-
+{% extends "network/layout.html" %} {% block body %} {% load static %}
 
 <div class="d-flex justify-content-center my-4">
-
-  <div class="card mb-3 border-0" style="max-width: 700px;">
+  <div class="card mb-3 border-0" style="max-width: 700px">
     <div class="row g-0">
       <div class="col-md-4">
-        <img src="{% static 'network/user.png' %}" class="img-fluid rounded-start" width="200" alt="user">
+        <img
+          src="{% static 'network/user.png' %}"
+          class="img-fluid rounded-start"
+          width="200"
+          alt="user"
+        />
       </div>
       <div class="col-md-8">
         <div class="card-body">
           <h5 class="card-title">{{profile.username}}</h5>
-          <p class="card-text">This is the users bio. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-            <div class="row text-muted mb-2">
-              <div class="col-6 col-sm-3"><strong>{{ followingcount }}</strong> Following</div>
-              <div class="col-6 col-sm-3"><strong>{{ followercount }}</strong> Followers</div>
+          <p class="card-text">
+            This is the users bio. Lorem Ipsum is simply dummy text of the
+            printing and typesetting industry.
+          </p>
+          <div  class="row text-muted mb-2">
+            <div class="col-6 col-sm-3">
+              <strong>{{ followingcount }}</strong> Following
+            </div>
+            <div  class="col-6 col-sm-3">
+              <strong id="followercount" ></strong> Followers
+            </div>
           </div>
-          {% if user.is_authenticated %}
-          {% if user.username != profile.username %}
-          <div >
-            <button id="follow_button" type="button" class="btn btn-primary"> </button>
-          </div>
-          {% endif %}
+          {% if user.is_authenticated %} 
+          {% if user.username != profile.username%}
+          <div id="follow_button"></div>
+          {% endif %} 
           {% endif %}
         </div>
       </div>
@@ -35,77 +39,114 @@
 
 {% for post in newpost %}
 <div class="d-flex align-items-center justify-content-center">
-<div class="card w-50 mx-5 mb-1">
-  <div class="card-body">
-    <div>
-        <p style="display:inline" class="font-weight-bold mr-3"><strong>{{post.user}}</strong></p>
-        <small style="float:right;" class=" text-muted text-end">{{post.date}}</small>
+  <div class="card w-50 mx-5 mb-1">
+    <div class="card-body">
+      <div>
+        <p style="display: inline" class="font-weight-bold mr-3">
+          <strong>{{post.user}}</strong>
+        </p>
+        <small style="float: right" class="text-muted text-end"
+          >{{post.date}}</small
+        >
         <p class="my-2">{{post.content }}</p>
-        
-          <div class="row row-cols-3 mt-3">
-            <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-pen-to-square"></i></a></div>
-            <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-heart" style="color:red"></i></a></div>
-            <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-comment"></i></a></div>
+
+        <div class="row row-cols-3 mt-3">
+          <div class="col-sm-1">
+            <a href="{% url 'login' %}" style="color: inherit"
+              ><i class="fa-solid fa-pen-to-square"></i
+            ></a>
+          </div>
+          <div class="col-sm-1">
+            <a href="{% url 'login' %}" style="color: inherit"
+              ><i class="fa-solid fa-heart" style="color: red"></i
+            ></a>
+          </div>
+          <div class="col-sm-1">
+            <a href="{% url 'login' %}" style="color: inherit"
+              ><i class="fa-solid fa-comment"></i
+            ></a>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </div>
 {% endfor %}
 
-<script>
+<script type="text/babel">
 
-document.addEventListener("DOMContentLoaded", function () {
+  let profile_id = "{{profile.id}}";
+  let csrftoken = "{{ csrf_token }}";
+  let isfollowing = ("{{is_following}}" === "True");
 
 
-  function followrefresh(follow) {
-    if (follow) {
-      document.querySelector("#follow_button").innerHTML = "Unfollow"
-      return true;
-    }  else {
-      document.querySelector("#follow_button").innerHTML = "Follow"
-      return false;
-    }
+
+  function Followcount() {
+
+    fetch(`/follow/${profile_id}`)
+    .then((response) => response.json())
+    .then((followcount) => {
+
+    })
+    
+    
+
+    return (
+      <div>
+          
+      </div>
+    );
   };
 
-    //server side isfollow check
-    let isfollow = ("{{ is_following }}" === "True");
+  function App() {
 
-    followrefresh(isfollow);
-
-    document.querySelector("#follow_button").onclick = () => {
-
-      let profile_id = "{{profile.id}}";
-      let csrftoken = "{{ csrf_token }}";
-
-      fetch(`/follow/${profile_id}`)
-      .then((response) => response.json())
-      .then((follow) => {
-        let following = follow.follow;
-
+    const [count, setCount] = React.useState(0);
+    
+    function putdetails(arg) {
         fetch(`/follow/${profile_id}`, {
-        method: 'PUT',
-        headers:{'X-CSRFToken':csrftoken},
-        body: JSON.stringify({
-            follow: followrefresh( !following ),
-        })
-      });
-    });
-        
-
-
-    
-
-      
-      
+            method: 'PUT',
+            headers:{'X-CSRFToken':csrftoken},
+            body: JSON.stringify({
+                follow: arg,
+            })
+        });
     }
-});
 
     
 
-  
+    function onCount() {
+      setCount(2);
+      putdetails(true);
+    }
 
+    function offCount() {
+      setCount(1);
+      putdetails(false);
+    }
+
+    let button = "";
+
+    if (isfollowing) {
+      button = (<button onClick={offCount} type="button" class="btn btn-outline-primary btn-sm">Unfollow</button>);
+    } else {
+      button = (<button onClick={onCount} type="button" class="btn btn-primary btn-sm">Follow</button>);
+    }
+
+    if (count === 2) {
+      button = (<button onClick={offCount} type="button" class="btn btn-outline-primary btn-sm">Unfollow</button>);
+    } else if (count === 1) {
+      button = (<button onClick={onCount} type="button" class="btn btn-primary btn-sm">Follow</button>);
+    }
+
+    return (
+      <div>
+          {button}
+      </div>
+    );
+  }
+
+  ReactDOM.render(<App />, document.querySelector("#follow_button"));
+  ReactDOM.render(<Followcount />, document.querySelector("#followercount"));
 </script>
-
 
 {% endblock %}

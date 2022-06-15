@@ -87,14 +87,17 @@ def newpost(request):
 def profile(request, user_id):
     newpost = Newpost.objects.filter(user=user_id).order_by('-date')
     profile = User.objects.get(id=user_id)
-    
+
     try:
         following = Follow.objects.get(user=request.user, profile=user_id)
         follow = following.follow
-        followercount = len(Follow.objects.filter(user=user_id, follow=True))
-        followingcount = len(Follow.objects.filter(profile=user_id, follow=True))
     except:
         follow = False
+    
+    try:
+        followingcount = len(Follow.objects.filter(user=user_id, follow=True))
+        followercount = len(Follow.objects.filter(profile=user_id, follow=True))
+    except:
         followercount = 0
         followingcount = 0
 
@@ -127,9 +130,14 @@ def follow(request, user_id):
     if request.method == "GET":
 
         try:
-            follow = Follow.objects.get(user=user, profile=profile)
-        except :
-            return JsonResponse({"error": "follow details not found."}, status=404)
-        
-        return JsonResponse(follow.serialize()) 
+            followingcount = len(Follow.objects.filter(user=user_id, follow=True))
+            followercount = len(Follow.objects.filter(profile=user_id, follow=True))
+        except:
+            followercount = 0
+            followingcount = 0
+
+        followcount = {
+            "followercount" : followercount,
+        }
+        return JsonResponse(followcount) 
     
