@@ -86,38 +86,50 @@ def newpost(request):
 
 def profile(request, user_id):
     newpost = Newpost.objects.filter(user=user_id).order_by('-date')
-    user = User.objects.get(id=user_id)
+    profile = User.objects.get(id=user_id)
+    
     try:
-        follow = Follow.objects.get(user=user_id)
-        followercount = len(follow.follower.all())
-        followingcount = len(follow.following.all())
+        following = Follow.objects.get(user=request.user, profile=user_id)
+        follow = following.follow
+        followercount = len(Follow.objects.filter(user=user_id, follow=True))
+        followingcount = len(Follow.objects.filter(profile=user_id, follow=True))
     except:
+        follow = False
         followercount = 0
         followingcount = 0
 
     
     return render(request,  "network/profile.html", {
         "newpost": newpost,
-        "profile": user,
+        "profile": profile,
         "followercount": followercount,
         "followingcount": followingcount,
+        "is_following": follow
 
     })
 
 def follow(request, user_id):
+    user = request.user
+    profile = User.objects.get(id=user_id)
+
     if request.method == "PUT":
         data = json.loads(request.body)
-        user = request.user
-        profile = User.objects.get(id=user_id)
-        
         try:
             follow = Follow.objects.get(user=user, profile=profile)
-            if data.get("follow") == True:
-                follow.follow = False
-            else:
-                follow.follow = True
+            follow.follow = data.get("follow")
+            follow.save()
         except:
             follow = Follow.objects.create(user=user, profile=profile, follow=True)
-            
+            follow.save()
+
         return HttpResponse(status=204)
+
+    if request.method == "GET":
+
+        try:
+            follow = Follow.objects.get(user=user, profile=profile)
+        except :
+            return JsonResponse({"error": "follow details not found."}, status=404)
+        
+        return JsonResponse(follow.serialize()) 
     

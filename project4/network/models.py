@@ -27,3 +27,8 @@ class Follow(models.Model):
     
     def __str__(self):
         return f"{self.user}, {self.profile}, {self.follow}"
+    
+    def serialize(self):
+        return {
+            "follow": self.follow
+        }
