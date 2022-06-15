@@ -4,6 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import JsonResponse
+import json
 
 from .models import Follow, User, Newpost
 
@@ -70,6 +73,9 @@ def register(request):
 def newpost(request):
     if request.method == "POST":
         content = request.POST["content"]
+        if content == "":
+            messages.error(request, 'Blank post cannot be created')
+            return HttpResponseRedirect(reverse("index"))
 
         user = request.user
 
@@ -88,10 +94,30 @@ def profile(request, user_id):
     except:
         followercount = 0
         followingcount = 0
+
     
-    return render(request, "network/profile.html", {
+    return render(request,  "network/profile.html", {
         "newpost": newpost,
         "profile": user,
         "followercount": followercount,
-        "followingcount": followingcount
+        "followingcount": followingcount,
+
     })
+
+def follow(request, user_id):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        user = request.user
+        profile = User.objects.get(id=user_id)
+        
+        try:
+            follow = Follow.objects.get(user=user, profile=profile)
+            if data.get("follow") == True:
+                follow.follow = False
+            else:
+                follow.follow = True
+        except:
+            follow = Follow.objects.create(user=user, profile=profile, follow=True)
+            
+        return HttpResponse(status=204)
+    

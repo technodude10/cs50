@@ -20,10 +20,13 @@
               <div class="col-6 col-sm-3"><strong>{{ followingcount }}</strong> Following</div>
               <div class="col-6 col-sm-3"><strong>{{ followercount }}</strong> Followers</div>
           </div>
-          <div id="follow_button">
-            <!-- <button type="button" class="btn btn-primary btn-sm">Follow</button>
-            <button type="button" class="btn btn-outline-primary btn-sm">Unfollow</button> -->
+          {% if user.is_authenticated %}
+          {% if user.username != profile.username %}
+          <div>
+            <button id="follow_button" type="button" class="btn btn-primary btn-sm">Follow</button>
           </div>
+          {% endif %}
+          {% endif %}
         </div>
       </div>
     </div>
@@ -50,30 +53,65 @@
 </div>
 {% endfor %}
 
+<script>
 
-<script type="text/babel">
+document.addEventListener("DOMContentLoaded", function () {
 
-  function App() {
+  
 
-      function follow_button() {
-
-        let buttonvalue = document.querySelector('#buttonfollow').innerHTML;
-
-        if (buttonvalue === "Follow") {
-          document.querySelector('#buttonfollow').innerHTML =   "Unfollow";
-        } else {
-          document.querySelector('#buttonfollow').innerHTML =   "Follow";
-        };
-        
-      };
-
-      return (
-        <button onClick={follow_button} type="button" id="buttonfollow" class="btn btn-outline-primary btn-sm">Follow</button>
-      );
+    document.querySelector("#follow_button").onclick = () => {
+      load_follow()
   };
+});
 
-  ReactDOM.render(<App />, document.querySelector("#follow_button"));
+    function load_follow() {
+
+      let profile_id = "{{profile.id}}";
+      let csrftoken = "{{ csrf_token }}";
+      fetch(`/follow/${profile_id}`, {
+        method: 'PUT',
+        headers:{'X-CSRFToken':csrftoken},
+        body: JSON.stringify({
+            follow: true,
+        })
+      }).then(() => {
+        document.querySelector("#follow_button").innerHTML = "Unfollow"
+      })
+  }
+
+  
+  //       // Archive/Unarchive button
+  //       const archive = document.createElement("div");
+  //       let archived_or_not = true;
+  
+  //       if (mailbox === "inbox") {
+  //         archive.innerHTML = `<button class="btn btn-sm btn-outline-primary" id="archive">Archive</button>`;
+  //         archived_or_not = true;
+  //       } else if (mailbox === "archive") {
+  //         archive.innerHTML = `<button class="btn btn-sm btn-outline-primary" id="archive">Unarchive</button>`;
+  //         archived_or_not = false;
+  //       } else {
+  //         archive.innerHTML = '';
+  //       }
+  //       document.querySelector("#email").append(element, archive);
+  
+  
+  //       // Archive/Unarchive function
+  //       document.querySelector("#archive").addEventListener("click", () => {
+  //         fetch(`/emails/${email_id}`, {
+  //           method: 'PUT',
+  //           body: JSON.stringify({
+  //               archived: archived_or_not
+  //           })
+  //         })
+  //         .then(() => {
+  //           load_mailbox("inbox");
+  //         })
+  //       });
+  //     });
+  // }
 
 </script>
+
 
 {% endblock %}

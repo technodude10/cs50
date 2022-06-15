@@ -14,6 +14,7 @@
         <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
         <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <script src="{% static 'network/network.js' %}"></script>
 </head>
     <body>
 
@@ -55,6 +56,16 @@
               </div>
             </div>
           </nav>
+
+          {% if messages %}
+          {% for message in messages %}
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+          <div class="alert alert-danger text-center" role="alert">
+            {{ message }}
+          </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
 
           {% if user.is_authenticated %}
   <!-- Modal -->
