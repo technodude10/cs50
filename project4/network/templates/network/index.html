@@ -114,7 +114,7 @@ let isfollowing = ("{{is_following}}" === "True");
 // edit content function
 function reply_click(clicked_id)
   {
-    // get emails from database & format them for mailbox view
+    // 
     fetch(`/editpost/${clicked_id}`)
     .then((response) => response.json())
     .then((editpost) => {
@@ -165,32 +165,48 @@ function putdetails(arg) {
         body: JSON.stringify({
             follow: arg,
         })
+    })
+    .then((response) => response.json())
+    .then((result) => {
+      // Print result
+      console.log(result);
+      fetch(`/updatefollow/${profile_id}`)
+        .then((response) => response.json())
+        .then((followercount) => {
+
+        var div = document.getElementById(`followercount`);
+        div.innerHTML = followercount.followercount;
     });
+  });
+
+    
 }
+
 
 function onCount() {
   setCount(2);
-  putdetails(true);
+  putdetails(true)
 }
 
 function offCount() {
   setCount(1);
-  putdetails(false);
+  putdetails(false)
 }
 
 let button = "";
 
 if (isfollowing) {
-  button = (<button onClick={offCount} type="button" class="btn btn-outline-primary btn-sm">Unfollow</button>);
+  button = (<button id="followbtn" onClick={offCount} type="button" class="btn btn-outline-primary btn-sm">Unfollow</button>);
 } else {
-  button = (<button onClick={onCount} type="button" class="btn btn-primary btn-sm">Follow</button>);
+  button = (<button id="followbtn" onClick={onCount} type="button" class="btn btn-primary btn-sm">Follow</button>);
 }
 
 if (count === 2) {
-  button = (<button onClick={offCount} type="button" class="btn btn-outline-primary btn-sm">Unfollow</button>);
+  button = (<button id="followbtn" onClick={offCount} type="button" class="btn btn-outline-primary btn-sm">Unfollow</button>);
 } else if (count === 1) {
-  button = (<button onClick={onCount} type="button" class="btn btn-primary btn-sm">Follow</button>);
+  button = (<button id="followbtn" onClick={onCount} type="button" class="btn btn-primary btn-sm">Follow</button>);
 }
+
 
 return (
   <div>

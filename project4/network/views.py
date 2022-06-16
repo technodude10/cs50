@@ -135,7 +135,7 @@ def follow(request, user_id):
             follow = Follow.objects.create(user=user, profile=profile, follow=True)
             follow.save()
 
-        return HttpResponse(status=204)
+        return JsonResponse({"message": "changes received."}, status=201)
 
     
 
@@ -183,3 +183,11 @@ def editpost(request, post_id):
     return JsonResponse(editpost.serialize())
 
 
+def updatefollow(request, user_id):
+
+    try:
+        followercount = len(Follow.objects.filter(profile=user_id, follow=True))
+    except:
+        followercount = 0
+
+    return JsonResponse({"followercount": followercount}, status=201)
