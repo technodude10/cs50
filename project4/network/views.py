@@ -8,14 +8,18 @@ from django.contrib import messages
 from django.http import JsonResponse
 import json
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 from .models import Follow, User, Newpost
 
 
 def index(request):
     newpost = Newpost.objects.all().order_by('-date')
+    paginator = Paginator(newpost, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        "newpost": newpost
+        "newpost": page_obj
     })
 
 
@@ -88,6 +92,9 @@ def newpost(request):
 def profile(request, user_id):
     newpost = Newpost.objects.filter(user=user_id).order_by('-date')
     profile = User.objects.get(id=user_id)
+    paginator = Paginator(newpost, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     try:
         following = Follow.objects.get(user=request.user, profile=user_id)
@@ -104,7 +111,7 @@ def profile(request, user_id):
 
     
     return render(request,  "network/profile.html", {
-        "newpost": newpost,
+        "newpost": page_obj,
         "profile": profile,
         "followercount": followercount,
         "followingcount": followingcount,
@@ -128,35 +135,32 @@ def follow(request, user_id):
 
         return HttpResponse(status=204)
 
-    if request.method == "GET":
-
-        try:
-            followingcount = len(Follow.objects.filter(user=user_id, follow=True))
-            followercount = len(Follow.objects.filter(profile=user_id, follow=True))
-        except:
-            followercount = 0
-            followingcount = 0
-
-        followcount = {
-            "followercount" : followercount,
-        }
-        return JsonResponse(followcount) 
     
 
 def following_page(request):
     user = request.user
     follow = Follow.objects.filter(user=user, follow=True)
-    profilelist = []
+    
+    # make sure that the follow object is not null
+    if not follow:
+        page_obj = None
+    else:
+        # gets the post of all the following users using Q object
+        query = Q()
+        for profile in follow:
+            query = query | Q(user = profile.profile)
 
-    # gets the post of all the following users using Q object
-    query = Q()
-    for profile in follow:
-        query = query | Q(user = profile.profile)
-
-    followpost = Newpost.objects.filter(query).order_by('-date')
+        followpost = Newpost.objects.filter(query).order_by('-date')
+        paginator = Paginator(followpost, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+    
 
     # return HttpResponseRedirect(reverse("index"))
     return render(request, "network/index.html", {
-        "newpost": followpost,
+        "newpost": page_obj,
         "followpage": True
     })
+
+def editpost(request, post_id):
+    return HttpResponseRedirect(reverse("index"))

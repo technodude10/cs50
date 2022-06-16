@@ -34,9 +34,11 @@
         <p class="my-2">{{post.content }}</p>
         
           <div class="row row-cols-6 mt-3">
-            <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-pen-to-square"></i></a></div>
+            {% if user == post.user%}
+            <div class="col-sm-1"><a href="{% url 'editpost' post.id %}" style="color: inherit; "><i class="fa-solid fa-pen-to-square"></i></a></div>
+            {% endif %}
             <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-heart" style="color:red"></i></a></div>
-            <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-comment"></i></a></div>
+            <div class="col-sm-1"><a href="#" style="color: inherit; "><i class="fa-solid fa-comment"></i></a></div>
           </div>
         </div>
     </div>
@@ -44,6 +46,22 @@
 </div>
 {% endfor %}
 
-</div>
+
+    <nav class="mt-4" aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        {% if newpost.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ newpost.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a></li>
+          {% endif %}
+        
+        {% if newpost.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ newpost.next_page_number }}">Next</a></li>
+          {% endif %}
+
+      </ul>
+    </nav>
+
+
+    
+  
 
 {% endblock %}
