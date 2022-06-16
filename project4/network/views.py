@@ -164,6 +164,21 @@ def following_page(request):
 
 
 def editpost(request, post_id):
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        id = data.get("id")
+        content = data.get("content")
+
+        print(content)
+
+        editpost = Newpost.objects.get(id=id)
+        editpost.content = content
+        editpost.save()
+        
+        return JsonResponse({"message": "changes received."}, status=201)
+
     editpost = Newpost.objects.get(id = post_id )
     return JsonResponse(editpost.serialize())
 

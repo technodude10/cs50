@@ -22,7 +22,7 @@ class Newpost(models.Model):
 
     def serialize(self):
         return {
-            "user": self.user.id,
+            "id": self.id,
             "content": self.content
         }
 
