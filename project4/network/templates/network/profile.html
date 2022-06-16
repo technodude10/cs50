@@ -23,7 +23,7 @@
               <strong>{{ followingcount }}</strong> Following
             </div>
             <div  class="col-6 col-sm-3">
-              <strong id="followercount" ></strong> Followers
+              <strong>{{ followercount }}</strong> Followers
             </div>
           </div>
           {% if user.is_authenticated %} 
@@ -81,22 +81,6 @@
 
 
 
-  function Followcount() {
-
-    fetch(`/follow/${profile_id}`)
-    .then((response) => response.json())
-    .then((followcount) => {
-
-    })
-    
-    
-
-    return (
-      <div>
-          
-      </div>
-    );
-  };
 
   function App() {
 
@@ -111,8 +95,6 @@
             })
         });
     }
-
-    
 
     function onCount() {
       setCount(2);
@@ -146,7 +128,6 @@
   }
 
   ReactDOM.render(<App />, document.querySelector("#follow_button"));
-  ReactDOM.render(<Followcount />, document.querySelector("#followercount"));
 </script>
 
 {% endblock %}

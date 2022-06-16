@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 import json
+from django.db.models import Q
 
 from .models import Follow, User, Newpost
 
@@ -141,3 +142,21 @@ def follow(request, user_id):
         }
         return JsonResponse(followcount) 
     
+
+def following_page(request):
+    user = request.user
+    follow = Follow.objects.filter(user=user, follow=True)
+    profilelist = []
+
+    # gets the post of all the following users using Q object
+    query = Q()
+    for profile in follow:
+        query = query | Q(user = profile.profile)
+
+    followpost = Newpost.objects.filter(query).order_by('-date')
+
+    # return HttpResponseRedirect(reverse("index"))
+    return render(request, "network/index.html", {
+        "newpost": followpost,
+        "followpage": True
+    })

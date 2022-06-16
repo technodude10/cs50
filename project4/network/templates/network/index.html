@@ -2,7 +2,11 @@
 
 {% block body %}
 <div id="index">
+{% if not followpage %}
 <h2 class="m-3">All Posts</h2>
+{% else %}
+<h2 class="m-3">Following Posts</h2>
+{% endif %}
 
     {% if message %}
         <div>{{ message }}</div>
