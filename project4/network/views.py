@@ -173,6 +173,10 @@ def editpost(request, post_id):
         id = data.get("id")
         content = data.get("content")
 
+        if content == "":
+            return JsonResponse({"message": "error"}, status=400)
+            
+
         editpost = Newpost.objects.get(id=id)
         editpost.content = content
         editpost.save()
@@ -181,6 +185,7 @@ def editpost(request, post_id):
 
     editpost = Newpost.objects.get(id = post_id )
     return JsonResponse(editpost.serialize())
+
 
 
 def updatefollow(request, user_id):

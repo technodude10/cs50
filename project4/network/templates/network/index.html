@@ -13,9 +13,9 @@
 <h2 class="m-3">All Posts</h2>
 {% endif %}
 
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
+    
+<div id="poor_mans_msg"> </div>
+
 
 
 <!-- {% if not user.is_authenticated %}
@@ -124,9 +124,7 @@ function reply_click(clicked_id)
         const content = document.querySelector("#editcontent").value;
         document.querySelector("#editcontent").value = "";
 
-        var div = document.getElementById(`c${editpost.id}`);
-        div.innerHTML = content;
-
+        
         // submit edited details via post
         fetch(`/editpost/${editpost.id}`, {
           method: "POST",
@@ -140,6 +138,17 @@ function reply_click(clicked_id)
           .then((result) => {
             // Print result
             console.log(result);
+            if (result.message === "error") {
+              var msg = document.getElementById(`poor_mans_msg`);
+              msg.innerHTML = `<div class="alert alert-danger text-center" role="alert">Edited post cannot be blank</div>`;
+            } else {
+              var msg = document.getElementById(`poor_mans_msg`);
+              msg.innerHTML = "";
+              var div = document.getElementById(`c${editpost.id}`);
+              div.innerHTML = content;
+            }
+            
+
           });
 
         var myModalEl = document.getElementById('editModal');
