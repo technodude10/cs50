@@ -10,16 +10,18 @@ import json
 from django.db.models import Q
 from django.core.paginator import Paginator
 
-from .models import Follow, User, Newpost
+from .models import Follow, User, Newpost, Like
 
 
 def index(request):
     newpost = Newpost.objects.all().order_by('-date')
+    like = Like.objects.all().order_by('-id')
     paginator = Paginator(newpost, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        "newpost": page_obj
+        "newpost": page_obj,
+        "like":like
     })
 
 
@@ -184,6 +186,7 @@ def editpost(request, post_id):
         return JsonResponse({"message": "changes received."}, status=201)
 
     editpost = Newpost.objects.get(id = post_id )
+    
     return JsonResponse(editpost.serialize())
 
 
@@ -196,3 +199,8 @@ def updatefollow(request, user_id):
         followercount = 0
 
     return JsonResponse({"followercount": followercount}, status=201)
+
+
+def like(request, post_id):
+    
+    return JsonResponse({"followercount": None}, status=201)
