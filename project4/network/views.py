@@ -110,15 +110,17 @@ def profile(request, user_id):
         followingcount = 0
 
     
-    return render(request,  "network/profile.html", {
+    return render(request,  "network/index.html", {
         "newpost": page_obj,
         "profile": profile,
         "followercount": followercount,
         "followingcount": followingcount,
-        "is_following": follow
+        "is_following": follow,
+        "is_profilepage": True
 
     })
 
+@login_required
 def follow(request, user_id):
     user = request.user
     profile = User.objects.get(id=user_id)
@@ -162,7 +164,7 @@ def following_page(request):
         "followpage": True
     })
 
-
+@login_required
 def editpost(request, post_id):
 
     if request.method == "POST":
@@ -170,8 +172,6 @@ def editpost(request, post_id):
 
         id = data.get("id")
         content = data.get("content")
-
-        print(content)
 
         editpost = Newpost.objects.get(id=id)
         editpost.content = content

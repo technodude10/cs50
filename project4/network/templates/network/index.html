@@ -5,10 +5,12 @@
 
 
 <div id="index">
-{% if not followpage %}
-<h2 class="m-3">All Posts</h2>
-{% else %}
+{% if followpage %}
 <h2 class="m-3">Following Posts</h2>
+{% elif is_profilepage %}
+<h2 class="m-3">Profile</h2>
+{% else %}
+<h2 class="m-3">All Posts</h2>
 {% endif %}
 
     {% if message %}
@@ -16,15 +18,53 @@
     {% endif %}
 
 
-
-
-<hr>
-
 <!-- {% if not user.is_authenticated %}
 <div class="text-center mt-5">
    <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a> to view content
 </div>
 {% endif %} -->
+
+{% if is_profilepage %}
+
+<div class="d-flex justify-content-center my-4">
+  <div class="card mb-3 border-0" style="max-width: 700px">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img
+          src="{% static 'network/user.png' %}"
+          class="img-fluid rounded-start"
+          width="200"
+          alt="user"
+        />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{profile.username}}</h5>
+          <p class="card-text">
+            This is the users bio. Lorem Ipsum is simply dummy text of the
+            printing and typesetting industry.
+          </p>
+          <div  class="row text-muted mb-2">
+            <div class="col-6 col-sm-3">
+              <strong>{{ followingcount }}</strong> Following
+            </div>
+            <div  class="col-6 col-sm-3">
+              <strong id="followercount">{{ followercount }}</strong> Followers
+            </div>
+          </div>
+          {% if user.is_authenticated %} 
+          {% if user.username != profile.username%}
+          <div id="follow_button"></div>
+          {% endif %} 
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
 
 
 {% for post in newpost %}
@@ -65,10 +105,13 @@
       </ul>
     </nav>
 
-<script>
+<script type="text/babel">
+
 let csrftoken = "{{ csrf_token }}";
+let profile_id = "{{profile.id}}";
+let isfollowing = ("{{is_following}}" === "True");
 
-
+// edit content function
 function reply_click(clicked_id)
   {
     // get emails from database & format them for mailbox view
@@ -108,6 +151,55 @@ function reply_click(clicked_id)
         };
     })
   }
+
+  // follow profile function 
+
+  function App() {
+
+const [count, setCount] = React.useState(0);
+
+function putdetails(arg) {
+    fetch(`/follow/${profile_id}`, {
+        method: 'PUT',
+        headers:{'X-CSRFToken':csrftoken},
+        body: JSON.stringify({
+            follow: arg,
+        })
+    });
+}
+
+function onCount() {
+  setCount(2);
+  putdetails(true);
+}
+
+function offCount() {
+  setCount(1);
+  putdetails(false);
+}
+
+let button = "";
+
+if (isfollowing) {
+  button = (<button onClick={offCount} type="button" class="btn btn-outline-primary btn-sm">Unfollow</button>);
+} else {
+  button = (<button onClick={onCount} type="button" class="btn btn-primary btn-sm">Follow</button>);
+}
+
+if (count === 2) {
+  button = (<button onClick={offCount} type="button" class="btn btn-outline-primary btn-sm">Unfollow</button>);
+} else if (count === 1) {
+  button = (<button onClick={onCount} type="button" class="btn btn-primary btn-sm">Follow</button>);
+}
+
+return (
+  <div>
+      {button}
+  </div>
+);
+}
+
+ReactDOM.render(<App />, document.querySelector("#follow_button"));
 
 </script>
 
