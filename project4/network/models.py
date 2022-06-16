@@ -15,10 +15,11 @@ class User(AbstractUser):
 class Newpost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     content = models.CharField(max_length=400)
+    like = models.ManyToManyField(User, blank=True, related_name="like")
     date = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.content}, {self.date}, {self.user}"
+        return f"{self.content}, {self.date}, {self.user}, {self.like}"
 
     def serialize(self):
         return {
@@ -37,20 +38,5 @@ class Follow(models.Model):
     def serialize(self):
         return {
             "follow": self.follow
-        }
-
-class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="likeduser")
-    post = models.ForeignKey(Newpost, on_delete=models.CASCADE, related_name="likedpost")
-    like = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.user}, {self.post}, {self.like}"
-
-    def serialize(self):
-        return {
-            "user_id": self.user.id,
-            "post": self.post.id,
-            "like" : self.like
         }
 

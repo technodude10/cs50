@@ -10,18 +10,17 @@ import json
 from django.db.models import Q
 from django.core.paginator import Paginator
 
-from .models import Follow, User, Newpost, Like
+from .models import Follow, User, Newpost
 
 
 def index(request):
     newpost = Newpost.objects.all().order_by('-date')
-    like = Like.objects.all().order_by('-id')
+    print(newpost)
     paginator = Paginator(newpost, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
         "newpost": page_obj,
-        "like":like
     })
 
 
