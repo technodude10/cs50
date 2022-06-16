@@ -1,6 +1,9 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+{% load static %}
+
+
 <div id="index">
 {% if not followpage %}
 <h2 class="m-3">All Posts</h2>
@@ -35,10 +38,12 @@
         
           <div class="row row-cols-6 mt-3">
             {% if user == post.user%}
-            <div class="col-sm-1"><a href="{% url 'editpost' post.id %}" style="color: inherit; "><i class="fa-solid fa-pen-to-square"></i></a></div>
+            <div  class="col-sm-1">
+              <a id="{{post.id}}" href="#"  onClick="reply_click(this.id)" style="color: inherit; "><i  data-bs-toggle="modal" data-bs-target="#editModal" class="fa-solid fa-pen-to-square"></i></a>
+            </div>
             {% endif %}
             <div class="col-sm-1"><a href="{% url 'login' %}" style="color: inherit; "><i class="fa-solid fa-heart" style="color:red"></i></a></div>
-            <div class="col-sm-1"><a href="#" style="color: inherit; "><i class="fa-solid fa-comment"></i></a></div>
+            <div class="col-sm-1"><i class="fa-solid fa-comment"></i></div>
           </div>
         </div>
     </div>
@@ -60,8 +65,46 @@
       </ul>
     </nav>
 
+<script>
 
-    
-  
+function reply_click(clicked_id)
+  {
+    // get emails from database & format them for mailbox view
+    fetch(`/editpost/${clicked_id}`)
+    .then((response) => response.json())
+    .then((editpost) => {
+      document.querySelector("#editcontent").value = editpost.content;
+
+      document.querySelector("#compose-form").onsubmit = () => {
+        const content = document.querySelector("#editcontent").value;
+        document.querySelector("#editcontent").value = "";
+
+        
+
+        // submit edited details via post
+        fetch("/editpost", {
+          method: "POST",
+          body: JSON.stringify({
+            user: editpost.user,
+            content: editpost.content,
+          }),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            // Print result
+            console.log(result);
+          });
+
+        var myModalEl = document.getElementById('editModal');
+        var modal = bootstrap.Modal.getInstance(myModalEl)
+        modal.hide();
+
+        return false;
+        
+        };
+    })
+  }
+
+</script>
 
 {% endblock %}

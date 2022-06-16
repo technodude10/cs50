@@ -52,7 +52,7 @@
 
         <div class="row row-cols-3 mt-3">
           {% if user == post.user%}
-            <div class="col-sm-1"><a href="{% url 'editpost' post.id %}" style="color: inherit; "><i class="fa-solid fa-pen-to-square"></i></a></div>
+            <div class="col-sm-1"><a href="#" data-bs-toggle="modal" data-bs-target="#editModal" value="{{post.id}}" style="color: inherit; "><i class="fa-solid fa-pen-to-square"></i></a></div>
             {% endif %}
           <div class="col-sm-1">
             <a href="{% url 'login' %}" style="color: inherit"

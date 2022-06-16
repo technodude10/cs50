@@ -162,5 +162,9 @@ def following_page(request):
         "followpage": True
     })
 
+
 def editpost(request, post_id):
-    return HttpResponseRedirect(reverse("index"))
+    editpost = Newpost.objects.get(id = post_id )
+    return JsonResponse(editpost.serialize())
+
+

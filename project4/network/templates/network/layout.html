@@ -14,6 +14,7 @@
         <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
         <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <script type="text/babel" src="{% static 'mail/network.js' %}"></script>
         {% block script %}
         {% endblock %}
         
@@ -70,7 +71,7 @@
           {% endif %}
 
           {% if user.is_authenticated %}
-  <!-- Modal -->
+  <!-- Create Post Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -94,6 +95,31 @@
       </div>
     </div>
   </div>
+
+  <!-- Edit Post Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form id="compose-form" >
+          <div class="mb-3">
+              <textarea class="form-control" id="editcontent" name="content" rows="2"></textarea>
+              </div>
+              
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+  
 
 {% endif %}
         

@@ -20,6 +20,12 @@ class Newpost(models.Model):
     def __str__(self):
         return f"{self.content}, {self.date}, {self.user}"
 
+    def serialize(self):
+        return {
+            "user": self.user.id,
+            "content": self.content
+        }
+
 class Follow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followuser")
     profile = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followprofile")

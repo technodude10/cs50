@@ -11,10 +11,11 @@ urlpatterns = [
     path("newpost", views.newpost, name="newpost"),
     path("profile/<int:user_id>", views.profile, name="profile"),
     path("following_page", views.following_page, name="following_page"),
+    path("editpost/<int:post_id>", views.editpost, name="editpost"),
 
      # API Routes
      path("follow/<int:user_id>", views.follow, name="follow"),
-     path("editpost/<int:post_id>", views.editpost, name="editpost")
+
 
 ]
 
