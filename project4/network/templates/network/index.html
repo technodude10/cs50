@@ -69,9 +69,6 @@
 
 {% for post in newpost %}
 
-
-
-
 <div class="d-flex justify-content-center">
   <div class="card w-50 mx-5 mb-1">
   <div class="card-body">
@@ -79,8 +76,6 @@
         <p style="display:inline" class="font-weight-bold mr-3"><a href="{% url 'profile' post.user.id %}" style="color: inherit; text-decoration:none; "><strong>{{post.user}}</strong></a></p>
         <small style="float:right;" class=" text-muted text-end">{{post.date}}</small>
         <p id="c{{post.id}}" class="my-2">{{post.content }}</p>
-
-        
          
         <div class="container mt-3">
           <div class="row">
@@ -114,11 +109,38 @@
       </ul>
     </nav>
 
+    <!-- pass data to js -->
+    {{ profile.id |json_script:"profile_id" }}
+    {{ is_following |json_script:"is_following" }}
+    
+
 <script type="text/babel">
 
-let csrftoken = "{{ csrf_token }}";
-let profile_id = "{{profile.id}}";
-let isfollowing = ("{{is_following}}" === "True");
+
+// get csrftoken
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+const profile_id = JSON.parse(document.getElementById('profile_id').textContent);
+
+const followbool = JSON.parse(document.getElementById('is_following').textContent);
+
+let isfollowing = ( followbool === "True");
 
 function like_click(clicked_id) {
 
