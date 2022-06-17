@@ -15,7 +15,6 @@ from .models import Follow, User, Newpost
 
 def index(request):
     newpost = Newpost.objects.all().order_by('-date')
-    print(newpost)
     paginator = Paginator(newpost, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -185,7 +184,6 @@ def editpost(request, post_id):
         return JsonResponse({"message": "changes received."}, status=201)
 
     editpost = Newpost.objects.get(id = post_id )
-    
     return JsonResponse(editpost.serialize())
 
 
@@ -201,5 +199,22 @@ def updatefollow(request, user_id):
 
 
 def like(request, post_id):
-    
-    return JsonResponse({"followercount": None}, status=201)
+
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        
+        likes = Newpost.objects.filter(id=post_id)
+        if not likes.exists():
+            return JsonResponse({}, status=400)
+        obj = likes.first()
+        if request.user in obj.like.all():
+            obj.like.remove(request.user)
+            liked = False
+        else:
+            obj.like.add(request.user)
+            liked = True
+        return JsonResponse({"like": liked}, status=201)
+        
+    likes = Newpost.objects.get(id=post_id)
+    likecount = len(likes.like.all())
+    return JsonResponse({"likecount": likecount}, status=201)
