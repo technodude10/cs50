@@ -12,8 +12,9 @@ from django.core.paginator import Paginator
 
 from .models import Follow, User, Newpost
 
-
+# index views display all post in chronological order
 def index(request):
+    """ In this view pagination is used to display only 10 posts per page """
     newpost = Newpost.objects.all().order_by('-date')
     paginator = Paginator(newpost, 10)
     page_number = request.GET.get('page')
@@ -74,6 +75,7 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+# this view lets users create a new text post and stores inside database
 @login_required 
 def newpost(request):
     if request.method == "POST":
@@ -89,6 +91,7 @@ def newpost(request):
 
         return HttpResponseRedirect(reverse("index"))
 
+# profile view shows each individuals profile details and posts
 def profile(request, user_id):
     newpost = Newpost.objects.filter(user=user_id).order_by('-date')
     profile = User.objects.get(id=user_id)
@@ -120,11 +123,12 @@ def profile(request, user_id):
 
     })
 
+# Follow view lets users follow/unfollow other profiles async
 @login_required
 def follow(request, user_id):
     user = request.user
     profile = User.objects.get(id=user_id)
-
+    """ gets data from js to follow/unfollow"""
     if request.method == "PUT":
         data = json.loads(request.body)
         try:
@@ -137,7 +141,7 @@ def follow(request, user_id):
 
         return JsonResponse({"message": "changes received."}, status=201)
 
-    
+# this view uses
 @login_required
 def following_page(request):
     user = request.user
