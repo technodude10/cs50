@@ -138,7 +138,7 @@ def follow(request, user_id):
         return JsonResponse({"message": "changes received."}, status=201)
 
     
-
+@login_required
 def following_page(request):
     user = request.user
     follow = Follow.objects.filter(user=user, follow=True)
@@ -187,7 +187,7 @@ def editpost(request, post_id):
     return JsonResponse(editpost.serialize())
 
 
-
+@login_required
 def updatefollow(request, user_id):
 
     try:
@@ -197,12 +197,12 @@ def updatefollow(request, user_id):
 
     return JsonResponse({"followercount": followercount}, status=201)
 
-
+@login_required
 def like(request, post_id):
 
     if request.method == "PUT":
         data = json.loads(request.body)
-        
+
         likes = Newpost.objects.filter(id=post_id)
         if not likes.exists():
             return JsonResponse({}, status=400)
