@@ -156,6 +156,7 @@ def following_page(request):
         for profile in follow:
             query = query | Q(user = profile.profile)
 
+        #get posts followed by the user
         followpost = Newpost.objects.filter(query).order_by('-date')
         paginator = Paginator(followpost, 10)
         page_number = request.GET.get('page')
@@ -168,6 +169,7 @@ def following_page(request):
         "followpage": True
     })
 
+# edit already created post using js and api
 @login_required
 def editpost(request, post_id):
 
@@ -190,7 +192,7 @@ def editpost(request, post_id):
     editpost = Newpost.objects.get(id = post_id )
     return JsonResponse(editpost.serialize())
 
-
+# update follower count async
 @login_required
 def updatefollow(request, user_id):
 
@@ -201,6 +203,7 @@ def updatefollow(request, user_id):
 
     return JsonResponse({"followercount": followercount}, status=201)
 
+# update like/unlike async
 @login_required
 def like(request, post_id):
 

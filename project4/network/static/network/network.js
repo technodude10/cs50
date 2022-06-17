@@ -18,11 +18,14 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
+// get profile id from html
 const profile_id = JSON.parse(document.getElementById('profile_id').textContent);
 
+// get isfollowing value from html
 let isfollowing = JSON.parse(document.getElementById('is_following').textContent);
 ;
 
+// like function -> updates like/unlike async and changes corresponding html element
 function like_click(clicked_id) {
 
   fetch(`/like/${clicked_id}`, {
@@ -61,7 +64,7 @@ function like_click(clicked_id) {
   })
 }
 
-// edit content function
+// edit content function & update html to display edits
 function reply_click(clicked_id)
   {
     // 
@@ -111,7 +114,7 @@ function reply_click(clicked_id)
     })
   }
 
-  // follow profile function 
+  // follow profile function using react 
 
   function App() {
 
