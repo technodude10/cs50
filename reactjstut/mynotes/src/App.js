@@ -1,24 +1,29 @@
+import React from 'react';
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
+  Route
 } from "react-router-dom";
 
 import './App.css';
 import Header from './components/Header';
 import NotesListPage from './pages/NotesListPage';
-// import NotePage from './pages/NotePage';
+import NotePage from './pages/NotePage';
 
 function App() {
+
+
   return (
     <Router>
-      <div className="App">
+      <div className='container dark'>
+        <div className='app'>
       <Header />
       <Routes>
-          <Route path="/" element={<NotesListPage />} />
-          {/* <Route path="note" element={<NotePage />} /> */}
+        <Route exact path="/" element={<NotesListPage />} />
+        <Route path="/note/:id" element={<NotePage />} />
       </Routes>
-    </div>
+      </div>
+      </div>
     </Router>
   );
 }
