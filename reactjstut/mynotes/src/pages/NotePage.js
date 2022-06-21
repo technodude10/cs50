@@ -63,8 +63,10 @@ const NotePage = () => {
     } else if (noteID !== 'new') {
       updateNote()
       navigate(-1)
-    } else if (noteID === 'new' && note !== null) {
+    } else if (noteID === 'new' && note.body) {
       createNote()
+      navigate(-1)
+    } else {
       navigate(-1)
     }
 
